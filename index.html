@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI First — ИИ-система управления командой</title>
+    <meta name="description" content="Система мониторинга и управления командой на базе ИИ. Не замена людей, а усиление управленца.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-card-hover: #1a1a26;
+            --border: #1e1e2e;
+            --text: #e4e4ef;
+            --text-muted: #8888a0;
+            --accent: #00d4ff;
+            --accent-glow: rgba(0, 212, 255, 0.15);
+            --accent-dark: #0099bb;
+            --gradient: linear-gradient(135deg, #00d4ff, #0088cc);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ── Nav ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links .btn-sm {
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 0.4rem 1.2rem;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .nav-links .btn-sm:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .burger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+
+        .burger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s;
+        }
+
+        /* ── Container ── */
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        section {
+            padding: 6rem 0;
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 2.4rem;
+            background: var(--gradient);
+            color: #000;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 50px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: var(--accent);
+            color: #000;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-top: 5rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 720px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.35rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.6rem);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--accent);
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 560px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* ── Section Headers ── */
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        /* ── Problem ── */
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .problem-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            background: var(--bg-card-hover);
+        }
+
+        .problem-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* ── Solution ── */
+        .solution-section {
+            background: linear-gradient(180deg, var(--bg) 0%, #0d0d18 50%, var(--bg) 100%);
+        }
+
+        .solution-block {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .solution-text h2 {
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .solution-text p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-bottom: 2rem;
+        }
+
+        .solution-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .solution-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .solution-list li::before {
+            content: '→';
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .solution-visual {
+            position: relative;
+        }
+
+        .data-schema {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            position: relative;
+        }
+
+        .schema-center {
+            width: 100px;
+            height: 100px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            font-weight: 700;
+            color: #000;
+            font-size: 0.85rem;
+            text-align: center;
+            box-shadow: 0 0 60px var(--accent-glow);
+        }
+
+        .schema-nodes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .schema-node {
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            font-size: 0.85rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .schema-node:hover {
+            border-color: var(--accent);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .schema-node .node-icon {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* ── How It Works ── */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            counter-reset: step;
+        }
+
+        .step {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            position: relative;
+            counter-increment: step;
+            transition: all 0.3s;
+        }
+
+        .step:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+
+        .step::before {
+            content: counter(step, decimal-leading-zero);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: rgba(0, 212, 255, 0.15);
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .step h3 {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .step p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ── Use Cases ── */
+        .usecases {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .usecase {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+
+        .usecase:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+
+        .usecase-tag {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            background: rgba(0, 212, 255, 0.08);
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .usecase h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .usecase p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .usecase-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .usecase-list li {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            padding-left: 1.2rem;
+            position: relative;
+        }
+
+        .usecase-list li::before {
+            content: '•';
+            color: var(--accent);
+            position: absolute;
+            left: 0;
+        }
+
+        /* ── Services ── */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .service-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .service-card:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .service-card:hover::after {
+            opacity: 1;
+        }
+
+        .service-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .service-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* ── CTA ── */
+        .cta-section {
+            text-align: center;
+            padding: 8rem 0;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-section .section-title {
+            margin-bottom: 1rem;
+        }
+
+        .cta-section .section-desc {
+            margin: 0 auto 2.5rem;
+        }
+
+        /* ── Footer ── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2.5rem 0;
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* ── Animations ── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 968px) {
+            .problems-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .steps {
+                grid-template-columns: 1fr 1fr;
+            }
+            .solution-block {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                background: rgba(10, 10, 15, 0.95);
+                backdrop-filter: blur(20px);
+                padding: 1.5rem 2rem;
+                gap: 1rem;
+                border-bottom: 1px solid var(--border);
+            }
+            .nav-links.open {
+                display: flex;
+            }
+            .burger {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 640px) {
+            section {
+                padding: 4rem 0;
+            }
+            .problems-grid,
+            .steps,
+            .usecases,
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-buttons {
+                flex-direction: column;
+            }
+            .hero-buttons .btn {
+                text-align: center;
+            }
+            .schema-nodes {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+    <div class="logo">AI <span>First</span></div>
+    <div class="nav-links" id="navLinks">
+        <a href="#problem">Проблема</a>
+        <a href="#solution">Решение</a>
+        <a href="#how">Как работает</a>
+        <a href="#services">Услуги</a>
+        <a href="#cta" class="btn-sm">Записаться</a>
+    </div>
+    <button class="burger" id="burger" aria-label="Меню">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-badge">AI-powered management</div>
+            <h1>Система, которую вы ставите управляющему, а&nbsp;отчёт получаете <em>сами</em></h1>
+            <p>ИИ-система мониторинга и управления командой. Видите реальную картину без микроменеджмента — не заменяем людей, а усиливаем управленца.</p>
+            <div class="hero-buttons">
+                <a href="#cta" class="btn">Записаться на аудит</a>
+                <a href="#how" class="btn btn-outline">Как это работает</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Problem -->
+<section id="problem">
+    <div class="container">
+        <div class="fade-in">
+            <div class="section-label">Проблема</div>
+            <h2 class="section-title">Вы не видите, что происходит в команде</h2>
+            <p class="section-desc">Отчёты приукрашены. Совещания съедают время. Реальные проблемы всплывают, когда уже поздно.</p>
+        </div>
+        <div class="problems-grid fade-in">
+            <div class="problem-card">
+                <div class="problem-icon">🔍</div>
+                <h3>Нет прозрачности</h3>
+                <p>Вы узнаёте о проблемах последним. Информация фильтруется на каждом уровне, и до вас доходит приглаженная версия.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⏱</div>
+                <h3>Микроменеджмент не масштабируется</h3>
+                <p>Контролировать каждого вручную невозможно. Чем больше команда — тем больше слепых зон.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📊</div>
+                <h3>Отчёты врут</h3>
+                <p>Люди пишут то, что хотите услышать. KPI не показывают реальной картины — они показывают умение их закрывать.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Solution -->
+<section id="solution" class="solution-section">
+    <div class="container">
+        <div class="solution-block fade-in">
+            <div class="solution-text">
+                <div class="section-label">Решение</div>
+                <h2>AI First анализирует работу команды за вас</h2>
+                <p>Система подключается к рабочим процессам, собирает данные из переписок, встреч и задач — и даёт вам объективную картину.</p>
+                <ul class="solution-list">
+                    <li>Мониторинг коммуникации команды в реальном времени</li>
+                    <li>Выявление проблем: кто не успевает, кто перегружен</li>
+                    <li>Анализ причин неэффективности</li>
+                    <li>Конкретные рекомендации руководителю</li>
+                </ul>
+            </div>
+            <div class="solution-visual">
+                <div class="data-schema">
+                    <div class="schema-center">AI First Engine</div>
+                    <div class="schema-nodes">
+                        <div class="schema-node">
+                            <span class="node-icon">💬</span>
+                            Переписки сотрудников
+                        </div>
+                        <div class="schema-node">
+                            <span class="node-icon">📅</span>
+                            Встречи и звонки
+                        </div>
+                        <div class="schema-node">
+                            <span class="node-icon">📋</span>
+                            Должностные инструкции
+                        </div>
+                        <div class="schema-node">
+                            <span class="node-icon">🎯</span>
+                            Задачи и спринты
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section id="how">
+    <div class="container">
+        <div class="fade-in">
+            <div class="section-label">Как работает</div>
+            <h2 class="section-title">Четыре шага к прозрачности</h2>
+            <p class="section-desc">Подключаем систему за неделю. Вы начинаете видеть реальную картину с первого дня.</p>
+        </div>
+        <div class="steps fade-in">
+            <div class="step">
+                <h3>Подключение источников</h3>
+                <p>Интегрируемся с мессенджерами, CRM, таск-трекерами и календарями вашей команды.</p>
+            </div>
+            <div class="step">
+                <h3>Сбор и анализ</h3>
+                <p>ИИ обрабатывает переписки, встречи, задачи и сопоставляет с должностными инструкциями.</p>
+            </div>
+            <div class="step">
+                <h3>Выявление паттернов</h3>
+                <p>Система находит узкие места: кто закопался, где буксует проект, что не так с процессом.</p>
+            </div>
+            <div class="step">
+                <h3>Рекомендации</h3>
+                <p>Вы получаете конкретные действия: кого разгрузить, какой процесс изменить, где нужно внимание.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Use Cases -->
+<section id="usecases">
+    <div class="container">
+        <div class="fade-in">
+            <div class="section-label">Применение</div>
+            <h2 class="section-title">Как это используют</h2>
+            <p class="section-desc">Реальные сценарии для собственников и руководителей.</p>
+        </div>
+        <div class="usecases fade-in">
+            <div class="usecase">
+                <div class="usecase-tag">Управление</div>
+                <h3>Мониторинг команды</h3>
+                <p>Видите реальную загрузку, коммуникацию и прогресс каждого сотрудника — без статус-митингов и отчётов.</p>
+                <ul class="usecase-list">
+                    <li>Кто перегружен, а кто недозагружен</li>
+                    <li>Где задачи буксуют и почему</li>
+                    <li>Какие проблемы замалчивают</li>
+                    <li>Кто выгорает и подаёт сигналы</li>
+                </ul>
+            </div>
+            <div class="usecase">
+                <div class="usecase-tag">Продажи</div>
+                <h3>Аналитика воронки</h3>
+                <p>ИИ анализирует коммуникацию с клиентами и показывает, где теряются сделки и что делать менеджерам.</p>
+                <ul class="usecase-list">
+                    <li>Почему клиенты уходят на конкретном этапе</li>
+                    <li>Какие скрипты работают, а какие нет</li>
+                    <li>Сравнение эффективности менеджеров</li>
+                    <li>Прогноз выполнения плана продаж</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services -->
+<section id="services">
+    <div class="container">
+        <div class="fade-in">
+            <div class="section-label">Услуги</div>
+            <h2 class="section-title">Что мы делаем для вашего бизнеса</h2>
+            <p class="section-desc">От аудита до полного внедрения ИИ в процессы компании.</p>
+        </div>
+        <div class="services-grid fade-in">
+            <div class="service-card">
+                <div class="service-icon">🔬</div>
+                <h3>Аудит процессов</h3>
+                <p>Анализируем финансы, юридические процессы, продажи, HR — находим, где ИИ даст максимальный эффект.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">⚙️</div>
+                <h3>Внедрение ИИ</h3>
+                <p>Интегрируем ИИ-решения в конкретные процессы: от мониторинга команды до автоматизации аналитики.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🤖</div>
+                <h3>Автоматизация рутины</h3>
+                <p>Документооборот, отчётность, сверки, обработка заявок — освобождаем время для решений, которые нельзя автоматизировать.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🎓</div>
+                <h3>Обучение сотрудников</h3>
+                <p>Учим команду работать с ИИ-инструментами, чтобы внедрение не осталось на бумаге.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section id="cta" class="cta-section">
+    <div class="container fade-in">
+        <div class="section-label">Начните сейчас</div>
+        <h2 class="section-title">Бесплатный аудит ваших процессов</h2>
+        <p class="section-desc">Покажем, где ИИ даст вашей компании максимальный результат. 30-минутная встреча — без обязательств.</p>
+        <a href="https://t.me/ai_first_bot" class="btn" target="_blank" rel="noopener">Записаться на аудит</a>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <p>© 2026 AI First. Внедрение ИИ в бизнес-процессы. <a href="mailto:hello@aifirst.ru">hello@aifirst.ru</a></p>
+    </div>
+</footer>
+
+<script>
+    // Burger menu
+    document.getElementById('burger').addEventListener('click', () => {
+        document.getElementById('navLinks').classList.toggle('open');
+    });
+
+    // Close menu on link click
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            document.getElementById('navLinks').classList.remove('open');
+        });
+    });
+
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
