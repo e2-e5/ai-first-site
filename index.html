@@ -1,740 +1,392 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI First — AI-система управления для собственника бизнеса</title>
-    <meta name="description" content="Ставите управляющему — отчёт получаете сами. AI мониторинг команды, исполнения решений и отдела продаж. Бесплатный аудит за 3 дня.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #08080d;
-            --bg-card: #111118;
-            --bg-card-hover: #16161f;
-            --accent: #00c8ff;
-            --accent-dim: rgba(0, 200, 255, 0.12);
-            --accent-glow: rgba(0, 200, 255, 0.25);
-            --text: #e8e8ed;
-            --text-dim: #8a8a9a;
-            --text-muted: #5a5a6a;
-            --border: rgba(255,255,255,0.06);
-            --radius: 16px;
-            --max-w: 1100px;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.65;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        h1, h2, h3, h4 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 600;
-            line-height: 1.2;
-        }
-
-        .container {
-            max-width: var(--max-w);
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        /* NAV */
-        nav {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 100;
-            background: rgba(8,8,13,0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            padding: 16px 0;
-        }
-        nav .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 700;
-            font-size: 1.25rem;
-            color: var(--accent);
-            text-decoration: none;
-            letter-spacing: -0.02em;
-        }
-        .nav-cta {
-            font-size: 0.85rem;
-            padding: 8px 20px;
-            background: transparent;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-        .nav-cta:hover {
-            background: var(--accent);
-            color: var(--bg);
-        }
-
-        /* HERO */
-        .hero {
-            padding: 160px 0 100px;
-            text-align: center;
-        }
-        .hero-badge {
-            display: inline-block;
-            font-size: 0.8rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--accent);
-            background: var(--accent-dim);
-            border: 1px solid rgba(0,200,255,0.15);
-            border-radius: 100px;
-            padding: 6px 18px;
-            margin-bottom: 32px;
-        }
-        .hero h1 {
-            font-size: clamp(2.2rem, 5vw, 3.5rem);
-            max-width: 800px;
-            margin: 0 auto 24px;
-            letter-spacing: -0.03em;
-        }
-        .hero h1 span { color: var(--accent); }
-        .hero-sub {
-            font-size: 1.15rem;
-            color: var(--text-dim);
-            max-width: 620px;
-            margin: 0 auto 40px;
-            line-height: 1.7;
-        }
-        .cta-primary {
-            display: inline-block;
-            padding: 16px 36px;
-            font-size: 1rem;
-            font-weight: 600;
-            font-family: 'Space Grotesk', sans-serif;
-            color: var(--bg);
-            background: var(--accent);
-            border-radius: 10px;
-            text-decoration: none;
-            transition: all 0.25s;
-            box-shadow: 0 0 30px var(--accent-glow);
-        }
-        .cta-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 50px var(--accent-glow);
-        }
-        .cta-micro {
-            display: block;
-            margin-top: 14px;
-            font-size: 0.82rem;
-            color: var(--text-muted);
-        }
-
-        /* SECTIONS */
-        section { padding: 100px 0; }
-        .section-label {
-            font-size: 0.75rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 12px;
-        }
-        .section-title {
-            font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-            max-width: 700px;
-            margin-bottom: 20px;
-            letter-spacing: -0.02em;
-        }
-        .section-desc {
-            font-size: 1.05rem;
-            color: var(--text-dim);
-            max-width: 600px;
-            margin-bottom: 48px;
-            line-height: 1.7;
-        }
-
-        /* PROBLEM CARDS */
-        .cards-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 32px 28px;
-            transition: all 0.25s;
-        }
-        .card:hover {
-            background: var(--bg-card-hover);
-            border-color: rgba(0,200,255,0.12);
-        }
-        .card-icon {
-            font-size: 1.8rem;
-            margin-bottom: 16px;
-        }
-        .card h3 {
-            font-size: 1.15rem;
-            margin-bottom: 10px;
-        }
-        .card p {
-            font-size: 0.92rem;
-            color: var(--text-dim);
-            line-height: 1.65;
-        }
-
-        .stat-block {
-            background: var(--accent-dim);
-            border: 1px solid rgba(0,200,255,0.12);
-            border-radius: var(--radius);
-            padding: 28px 32px;
-            font-size: 1rem;
-            color: var(--text-dim);
-            line-height: 1.7;
-        }
-        .stat-block strong {
-            color: var(--accent);
-        }
-
-        /* INSIGHT */
-        .insight-section {
-            background: linear-gradient(135deg, rgba(0,200,255,0.04) 0%, transparent 60%);
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-        }
-        .insight-section .section-title {
-            max-width: 600px;
-        }
-        .insight-text {
-            font-size: 1.05rem;
-            color: var(--text-dim);
-            max-width: 640px;
-            line-height: 1.8;
-        }
-        .insight-text strong {
-            color: var(--text);
-        }
-
-        /* STEPS */
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        .step {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 32px 28px;
-            position: relative;
-        }
-        .step-num {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 3rem;
-            font-weight: 700;
-            color: rgba(0,200,255,0.1);
-            position: absolute;
-            top: 20px; right: 24px;
-            line-height: 1;
-        }
-        .step h3 {
-            font-size: 1.15rem;
-            margin-bottom: 10px;
-            color: var(--accent);
-        }
-        .step p {
-            font-size: 0.92rem;
-            color: var(--text-dim);
-            line-height: 1.65;
-        }
-
-        /* COMPARISON TABLE */
-        .compare-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 32px;
-        }
-        .compare-table th,
-        .compare-table td {
-            padding: 16px 20px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.92rem;
-        }
-        .compare-table th {
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 600;
-            color: var(--accent);
-            font-size: 0.95rem;
-        }
-        .compare-table td:first-child {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            width: 28%;
-        }
-        .compare-table tr:last-child td { border-bottom: none; }
-
-        @media (max-width: 640px) {
-            .compare-table { font-size: 0.82rem; }
-            .compare-table th, .compare-table td { padding: 12px 10px; }
-        }
-
-        /* USE CASES */
-        .cases-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
-        }
-        .case-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 36px 28px;
-        }
-        .case-label {
-            font-size: 0.72rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 12px;
-        }
-        .case-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 16px;
-        }
-        .case-card ul {
-            list-style: none;
-            padding: 0;
-        }
-        .case-card li {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-            padding: 6px 0 6px 20px;
-            position: relative;
-            line-height: 1.55;
-        }
-        .case-card li::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: var(--accent);
-        }
-        .case-result {
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid var(--border);
-            font-size: 0.9rem;
-            color: var(--text);
-            font-weight: 500;
-        }
-
-        /* FAQ */
-        .faq-list {
-            display: grid;
-            gap: 16px;
-            max-width: 720px;
-        }
-        .faq-item {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 24px 28px;
-        }
-        .faq-q {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        .faq-a {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-            line-height: 1.65;
-        }
-
-        /* PRICING */
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        .price-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 36px 28px;
-            position: relative;
-        }
-        .price-card.featured {
-            border-color: rgba(0,200,255,0.25);
-            box-shadow: 0 0 40px rgba(0,200,255,0.06);
-        }
-        .price-card .tag {
-            position: absolute;
-            top: -12px; right: 24px;
-            background: var(--accent);
-            color: var(--bg);
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            padding: 4px 14px;
-            border-radius: 100px;
-        }
-        .price-name {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.15rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-        .price-amount {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 4px;
-        }
-        .price-period {
-            font-size: 0.82rem;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-        }
-        .price-features {
-            list-style: none;
-            padding: 0;
-        }
-        .price-features li {
-            font-size: 0.88rem;
-            color: var(--text-dim);
-            padding: 8px 0 8px 22px;
-            position: relative;
-        }
-        .price-features li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--accent);
-            font-weight: 700;
-        }
-        .price-note {
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid var(--border);
-            font-size: 0.82rem;
-            color: var(--text-muted);
-        }
-
-        /* CTA FINAL */
-        .cta-section {
-            text-align: center;
-            padding: 120px 0;
-            background: linear-gradient(180deg, transparent 0%, rgba(0,200,255,0.03) 100%);
-        }
-        .cta-section .section-title {
-            margin: 0 auto 16px;
-        }
-        .cta-section .section-desc {
-            margin: 0 auto 40px;
-            text-align: center;
-        }
-
-        /* FOOTER */
-        footer {
-            border-top: 1px solid var(--border);
-            padding: 32px 0;
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        /* FADE-IN ANIMATION */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        @media (max-width: 768px) {
-            section { padding: 72px 0; }
-            .hero { padding: 120px 0 72px; }
-            .cards-3, .steps, .pricing-grid, .cases-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI First — AI-система управления для собственника бизнеса</title>
+<meta name="description" content="Ставите управляющему — отчёт получаете сами. AI мониторинг команды, исполнения решений и отдела продаж. Бесплатный аудит за 3 дня.">
+<meta property="og:title" content="AI First — AI-система управления для собственника бизнеса">
+<meta property="og:description" content="Ставите управляющему — отчёт получаете сами. AI мониторинг команды, исполнения решений и отдела продаж.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;
+  --bg-card:#12121a;
+  --accent:#00d4ff;
+  --accent-dim:rgba(0,212,255,.12);
+  --accent-glow:rgba(0,212,255,.25);
+  --text:#e4e4ed;
+  --text-dim:#8a8a9a;
+  --text-heading:#f0f0f8;
+  --border:#1e1e2e;
+  --radius:12px;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:'Space Grotesk',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent);text-decoration:none}
+.container{max-width:1120px;margin:0 auto;padding:0 24px}
+section{padding:100px 0}
+@media(max-width:768px){section{padding:64px 0}}
+h1,h2,h3,h4{color:var(--text-heading);font-weight:700;line-height:1.2}
+h1{font-size:clamp(2rem,5vw,3.25rem);letter-spacing:-.02em}
+h2{font-size:clamp(1.6rem,3.5vw,2.4rem);letter-spacing:-.015em;margin-bottom:48px}
+h3{font-size:1.2rem;margin-bottom:12px}
+.section-label{
+  display:inline-block;font-size:.75rem;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:16px;
+}
+.subtitle{font-size:clamp(1.05rem,2vw,1.25rem);color:var(--text-dim);max-width:640px;line-height:1.6}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:16px 36px;font-family:inherit;font-size:1.05rem;font-weight:600;
+  color:#000;background:var(--accent);border:none;border-radius:var(--radius);
+  cursor:pointer;transition:transform .2s,box-shadow .2s;
+  box-shadow:0 0 24px var(--accent-glow);
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 4px 32px var(--accent-glow)}
+.btn-micro{display:block;margin-top:12px;font-size:.85rem;color:var(--text-dim)}
+.hero{
+  min-height:100vh;display:flex;align-items:center;
+  position:relative;overflow:hidden;padding-top:60px;
+}
+.hero::before{
+  content:'';position:absolute;width:600px;height:600px;
+  top:-200px;right:-100px;
+  background:radial-gradient(circle,var(--accent-glow) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-content{position:relative;z-index:1;max-width:720px}
+.hero h1{margin-bottom:24px}
+.hero .subtitle{margin-bottom:40px}
+.logo{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:20px 24px;
+  background:rgba(10,10,15,.8);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.logo span{font-size:1.15rem;font-weight:700;color:var(--text-heading);letter-spacing:.04em}
+.logo .dot{color:var(--accent)}
+.cards{display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:32px;
+  transition:border-color .3s,transform .3s;
+}
+.card:hover{border-color:var(--accent);transform:translateY(-4px)}
+.card-icon{
+  width:48px;height:48px;display:flex;align-items:center;justify-content:center;
+  background:var(--accent-dim);border-radius:10px;margin-bottom:20px;font-size:1.4rem;
+}
+.card p{color:var(--text-dim);font-size:.95rem}
+.anchor-stat{
+  margin-top:56px;padding:32px;background:var(--bg-card);
+  border-left:3px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:1.05rem;color:var(--text-dim);
+}
+.anchor-stat strong{color:var(--accent);font-size:1.5rem;display:block;margin-bottom:8px}
+.insight-block{max-width:700px;font-size:1.1rem;line-height:1.75;color:var(--text-dim)}
+.insight-block p+p{margin-top:20px}
+.insight-block strong{color:var(--text-heading)}
+.steps{display:grid;gap:32px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));counter-reset:step}
+.step{
+  position:relative;padding:32px;padding-top:60px;
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+}
+.step::before{
+  counter-increment:step;content:counter(step);
+  position:absolute;top:24px;left:32px;
+  font-size:1.6rem;font-weight:700;color:var(--accent);opacity:.6;
+}
+.step h3{margin-bottom:10px}
+.step p{color:var(--text-dim);font-size:.95rem}
+.compare-table{width:100%;border-collapse:collapse;font-size:.95rem}
+.compare-table th,.compare-table td{padding:16px 20px;text-align:left;border-bottom:1px solid var(--border)}
+.compare-table th{color:var(--accent);font-weight:600;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
+.compare-table td:first-child{color:var(--text-dim);font-weight:500}
+.compare-table tr:last-child td{border-bottom:none}
+.table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow-x:auto}
+.use-cases{display:grid;gap:32px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.use-case{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:36px}
+.use-case h3{color:var(--accent);font-size:1.1rem;margin-bottom:20px}
+.use-case ul{list-style:none;margin-bottom:20px}
+.use-case li{position:relative;padding-left:20px;margin-bottom:10px;color:var(--text-dim);font-size:.95rem}
+.use-case li::before{content:'\2192';position:absolute;left:0;color:var(--accent)}
+.use-case .result{padding-top:16px;border-top:1px solid var(--border);font-weight:600;color:var(--text-heading);font-size:.95rem}
+.faq-list{max-width:760px}
+.faq-item{border-bottom:1px solid var(--border);padding:24px 0}
+.faq-q{
+  font-weight:600;font-size:1.05rem;color:var(--text-heading);
+  cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;
+}
+.faq-q::after{content:'+';font-size:1.4rem;color:var(--accent);transition:transform .3s;flex-shrink:0}
+.faq-item.open .faq-q::after{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;color:var(--text-dim);font-size:.95rem;line-height:1.7}
+.faq-item.open .faq-a{max-height:200px;padding-top:14px}
+.pricing-grid{display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.price-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:36px;display:flex;flex-direction:column;
+}
+.price-card.featured{border-color:var(--accent)}
+.price-card h3{font-size:1.15rem;margin-bottom:8px}
+.price-card .price{font-size:2rem;font-weight:700;color:var(--accent);margin:16px 0 8px}
+.price-card .price-period{font-size:.85rem;color:var(--text-dim)}
+.price-card .price-note{font-size:.85rem;color:var(--text-dim);margin-bottom:20px}
+.price-card ul{list-style:none;flex:1}
+.price-card li{padding:8px 0 8px 22px;position:relative;color:var(--text-dim);font-size:.93rem}
+.price-card li::before{content:'\2713';position:absolute;left:0;color:var(--accent);font-weight:700}
+.price-card .target{margin-top:20px;padding-top:16px;border-top:1px solid var(--border);font-size:.85rem;color:var(--text-dim)}
+.cta-final{text-align:center}
+.cta-final h2{margin-bottom:20px}
+.cta-final .subtitle{margin:0 auto 40px;text-align:center}
+footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;font-size:.85rem;color:var(--text-dim)}
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@media(max-width:640px){
+  .cards,.steps,.pricing-grid,.use-cases{grid-template-columns:1fr}
+  .hero{min-height:auto;padding-top:100px;padding-bottom:60px}
+  .compare-table th,.compare-table td{padding:12px 14px;font-size:.85rem}
+}
+</style>
 </head>
 <body>
 
-<nav>
-    <div class="container">
-        <a href="#" class="logo">AI First</a>
-        <a href="https://t.me/Urlexx" class="nav-cta">Записаться на аудит</a>
-    </div>
+<nav class="logo">
+  <div class="container">
+    <span>AI<span class="dot">.</span>FIRST</span>
+  </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
-    <div class="container">
-        <div class="hero-badge">AI-powered management</div>
-        <h1>Вы управляете компанией.<br><span>А кто управляет информацией?</span></h1>
-        <p class="hero-sub">AI First — система, которую вы ставите управляющему, а отчёт получаете сами. Каждое утро. Без вопросов.</p>
-        <a href="https://t.me/Urlexx" class="cta-primary">Бесплатный аудит за 3 дня →</a>
-        <span class="cta-micro">Подключим 2 рабочих чата → покажем, что вы не видите</span>
+  <div class="container">
+    <div class="hero-content reveal">
+      <h1>Вы управляете компанией.<br>А кто управляет информацией?</h1>
+      <p class="subtitle">AI First — система, которую вы ставите управляющему, а&nbsp;отчёт получаете сами. Каждое утро. Без&nbsp;вопросов.</p>
+      <a href="https://t.me/Urlexx" class="btn">Бесплатный аудит за 3 дня &#8594;</a>
+      <span class="btn-micro">Подключим 2 рабочих чата &#8594; покажем, что вы не видите</span>
     </div>
+  </div>
 </section>
 
-<!-- ПРОБЛЕМА -->
-<section class="fade-in">
-    <div class="container">
-        <div class="section-label">Проблема</div>
-        <h2 class="section-title">Вы принимаете решения — но не знаете, дошли ли они до исполнения</h2>
-        <p class="section-desc">Отчёты приукрашены. Совещания съедают время. Реальные проблемы всплывают, когда уже поздно.</p>
-
-        <div class="cards-3">
-            <div class="card">
-                <div class="card-icon">💨</div>
-                <h3>Решения испаряются</h3>
-                <p>Обсудили на планёрке, зафиксировали, ушли. Через неделю — ничего не сделано. И никто не скажет вам об этом сам.</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">🪞</div>
-                <h3>Информация искажена</h3>
-                <p>Управляющий докладывает «всё по плану». Но в чатах команда буксует, задачи переносят, клиенты ждут ответа третий день.</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">⏳</div>
-                <h3>Нет времени копать</h3>
-                <p>Вы не полезете читать 47 чатов. А именно там — реальная картина вашего бизнеса.</p>
-            </div>
-        </div>
-
-        <div class="stat-block">
-            По нашим данным, <strong>50% решений с планёрки</strong> не доходят до исполнения в срок. Вы об этом узнаёте в лучшем случае на следующей планёрке. В худшем — от клиента.
-        </div>
+<section id="problem">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Проблема</span>
+      <h2>Вы принимаете решения — но не знаете, дошли&nbsp;ли они до исполнения</h2>
     </div>
+    <div class="cards">
+      <div class="card reveal">
+        <div class="card-icon">&#128168;</div>
+        <h3>Решения испаряются</h3>
+        <p>Обсудили на планёрке, зафиксировали, ушли. Через неделю — ничего не сделано. И&nbsp;никто не скажет вам об этом сам.</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">&#129695;</div>
+        <h3>Информация искажена</h3>
+        <p>Управляющий докладывает &laquo;всё по плану&raquo;. Но в чатах команда буксует, задачи переносят, клиенты ждут ответа третий день.</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">&#8987;</div>
+        <h3>Нет времени копать</h3>
+        <p>Вы не полезете читать 47 чатов. А именно там — реальная картина вашего бизнеса.</p>
+      </div>
+    </div>
+    <div class="anchor-stat reveal">
+      <strong>50% решений с планёрки не доходят до исполнения в срок.</strong>
+      Вы об этом узнаёте в лучшем случае на следующей планёрке. В худшем — от клиента.
+    </div>
+  </div>
 </section>
 
-<!-- ИНСАЙТ -->
-<section class="insight-section fade-in">
-    <div class="container">
-        <div class="section-label">Инсайт</div>
-        <h2 class="section-title">Честно: вы не хотите это делать сами. И правильно.</h2>
-        <div class="insight-text">
-            <p>Мы провели десятки встреч с собственниками. Каждый говорит: «Классная система — поставьте моему управляющему».</p>
-            <br>
-            <p>И они правы. Собственник не должен лезть в операционку. Он должен <strong>видеть результат</strong>.</p>
-            <br>
-            <p>Поэтому AI First работает так: <strong>система стоит у вашего COO/управляющего. Он работает с ней. А вы — просто читаете отчёт.</strong></p>
-        </div>
+<section id="insight">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Инсайт</span>
+      <h2>Честно: вы не хотите это делать сами. И правильно.</h2>
     </div>
+    <div class="insight-block reveal">
+      <p>Мы провели десятки встреч с собственниками. Каждый говорит: <strong>&laquo;Классная система — поставьте моему управляющему&raquo;</strong>.</p>
+      <p>И они правы. Собственник не должен лезть в операционку. Он должен <strong>видеть результат</strong>.</p>
+      <p>Поэтому AI First работает так: система стоит у вашего COO/управляющего. Он работает с ней. А вы — просто читаете отчёт.</p>
+    </div>
+  </div>
 </section>
 
-<!-- КАК РАБОТАЕТ -->
-<section class="fade-in">
-    <div class="container">
-        <div class="section-label">Как работает</div>
-        <h2 class="section-title">Вам ничего не нужно делать. Буквально.</h2>
-        <p class="section-desc">Подключаем систему за неделю. Первый отчёт — через 3 дня.</p>
-
-        <div class="steps">
-            <div class="step">
-                <span class="step-num">01</span>
-                <h3>Подключаем</h3>
-                <p>Рабочие чаты, почту, CRM, задачники — всё, что есть. Без перестройки процессов.</p>
-            </div>
-            <div class="step">
-                <span class="step-num">02</span>
-                <h3>Анализируем 24/7</h3>
-                <p>AI мониторит коммуникации: кто что обсуждает, что обещано, что сделано, где молчат, где буксуют.</p>
-            </div>
-            <div class="step">
-                <span class="step-num">03</span>
-                <h3>Вы получаете</h3>
-                <p>Каждое утро — 5-минутный брифинг в личку. Ваш управляющий — рабочую панель с сигналами и рекомендациями.</p>
-            </div>
-        </div>
+<section id="how">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Как это работает</span>
+      <h2>Вам ничего не нужно делать. Буквально.</h2>
     </div>
+    <div class="steps">
+      <div class="step reveal">
+        <h3>Подключаем</h3>
+        <p>Рабочие чаты, почту, CRM, задачники — всё, что есть. Без перестройки процессов.</p>
+      </div>
+      <div class="step reveal">
+        <h3>Анализируем 24/7</h3>
+        <p>AI мониторит коммуникации: кто что обсуждает, что обещано, что сделано, где молчат, где буксуют.</p>
+      </div>
+      <div class="step reveal">
+        <h3>Вы получаете</h3>
+        <p>Каждое утро — 5-минутный брифинг в личку. Ваш управляющий — рабочую панель с сигналами и рекомендациями.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- ДВА ПОЛЬЗОВАТЕЛЯ -->
-<section class="fade-in">
-    <div class="container">
-        <div class="section-label">Два пользователя — одна система</div>
-        <h2 class="section-title">Собственник видит картину. Управляющий получает инструмент.</h2>
-
-        <table class="compare-table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Собственник</th>
-                    <th>COO / Управляющий</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Что получает</td>
-                    <td>Утренний брифинг в мессенджер</td>
-                    <td>Рабочая панель с сигналами</td>
-                </tr>
-                <tr>
-                    <td>Формат</td>
-                    <td>5 минут чтения</td>
-                    <td>Ежедневная работа</td>
-                </tr>
-                <tr>
-                    <td>Ценность</td>
-                    <td>Контроль без микроменеджмента</td>
-                    <td>Видимость по команде + рекомендации</td>
-                </tr>
-                <tr>
-                    <td>Усилие</td>
-                    <td>Ноль. Открыл — прочитал</td>
-                    <td>Интегрирован в работу</td>
-                </tr>
-            </tbody>
-        </table>
+<section id="users">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Два пользователя</span>
+      <h2>Собственник видит картину. Управляющий получает инструмент.</h2>
     </div>
+    <div class="table-wrap reveal">
+      <table class="compare-table">
+        <thead>
+          <tr><th></th><th>Собственник</th><th>COO / Управляющий</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Что получает</td><td>Утренний брифинг в мессенджер</td><td>Рабочая панель с сигналами</td></tr>
+          <tr><td>Формат</td><td>5 минут чтения</td><td>Ежедневная работа</td></tr>
+          <tr><td>Ценность</td><td>Контроль без микроменеджмента</td><td>Видимость по команде + рекомендации</td></tr>
+          <tr><td>Усилие</td><td>Ноль. Открыл — прочитал</td><td>Интегрирован в работу</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </section>
 
-<!-- USE CASES -->
-<section class="fade-in">
-    <div class="container">
-        <div class="section-label">Применение</div>
-        <h2 class="section-title">Два сценария, которые уже работают</h2>
-
-        <div class="cases-grid">
-            <div class="case-card">
-                <div class="case-label">Управление</div>
-                <h3>Мониторинг исполнения</h3>
-                <ul>
-                    <li>Подключаем рабочие чаты команды</li>
-                    <li>Отслеживаем: решение принято → выполнено или забыто</li>
-                    <li>Сигналы: просрочки, молчуны, повторяющиеся сбои</li>
-                </ul>
-                <div class="case-result">Результат: вы видите, что 40% задач спринта буксуют — до того, как сорвётся дедлайн</div>
-            </div>
-            <div class="case-card">
-                <div class="case-label">Продажи</div>
-                <h3>Мониторинг отдела продаж</h3>
-                <ul>
-                    <li>Анализ переписок с клиентами + CRM + звонки</li>
-                    <li>Сигналы: потерянные лиды, долгие ответы, слабые менеджеры</li>
-                    <li>Сравнение эффективности менеджеров</li>
-                </ul>
-                <div class="case-result">Результат: через неделю вы знаете, кто из менеджеров теряет клиентов и почему</div>
-            </div>
-        </div>
+<section id="cases">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Сценарии</span>
+      <h2>Два сценария, которые уже работают</h2>
     </div>
+    <div class="use-cases">
+      <div class="use-case reveal">
+        <h3>Мониторинг исполнения</h3>
+        <ul>
+          <li>Подключаем рабочие чаты команды</li>
+          <li>Отслеживаем: решение принято &#8594; выполнено или забыто</li>
+          <li>Сигналы: просрочки, молчуны, повторяющиеся сбои</li>
+        </ul>
+        <div class="result">Результат: вы видите, что 40% задач спринта буксуют — до того, как сорвётся дедлайн</div>
+      </div>
+      <div class="use-case reveal">
+        <h3>Мониторинг отдела продаж</h3>
+        <ul>
+          <li>Анализ переписок с клиентами + CRM + звонки</li>
+          <li>Сигналы: потерянные лиды, долгие ответы, слабые менеджеры</li>
+        </ul>
+        <div class="result">Результат: через неделю вы знаете, кто из менеджеров теряет клиентов и почему</div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- FAQ -->
-<section class="fade-in">
-    <div class="container">
-        <div class="section-label">Вопросы</div>
-        <h2 class="section-title">Вопросы, которые нам задают</h2>
-
-        <div class="faq-list">
-            <div class="faq-item">
-                <div class="faq-q">«А что с безопасностью данных?»</div>
-                <div class="faq-a">Данные обрабатываются на выделенном сервере. Мы не храним переписки — только аналитические сигналы. NDA подписываем до начала.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-q">«Мне не нужна ещё одна система»</div>
-                <div class="faq-a">Вам — не нужна. Вы получаете сообщение в Telegram. Система нужна вашему управляющему — и она упрощает его работу, а не усложняет.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-q">«У нас уже есть CRM / задачник / планёрки»</div>
-                <div class="faq-a">Отлично. Мы подключаемся поверх. Не заменяем, а видим то, чего CRM не видит — реальное поведение команды.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-q">«Сколько времени на внедрение?»</div>
-                <div class="faq-a">Подключение — 1 день. Первый отчёт — через 3 дня. Полная настройка — 2 недели.</div>
-            </div>
-        </div>
+<section id="faq">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">FAQ</span>
+      <h2>Вопросы, которые нам задают</h2>
     </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-q">&laquo;А что с безопасностью данных?&raquo;</div>
+        <div class="faq-a">Данные обрабатываются на выделенном сервере. Мы не храним переписки — только аналитические сигналы. NDA подписываем до начала.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">&laquo;Мне не нужна ещё одна система&raquo;</div>
+        <div class="faq-a">Вам — не нужна. Вы получаете сообщение в Telegram. Система нужна вашему управляющему — и она упрощает его работу, а не усложняет.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">&laquo;У нас уже есть CRM / задачник / планёрки&raquo;</div>
+        <div class="faq-a">Отлично. Мы подключаемся поверх. Не заменяем, а видим то, чего CRM не видит — реальное поведение команды.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">&laquo;Сколько времени на внедрение?&raquo;</div>
+        <div class="faq-a">Подключение — 1 день. Первый отчёт — через 3 дня. Полная настройка — 2 недели.</div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- ТАРИФЫ -->
-<section class="fade-in">
-    <div class="container">
-        <div class="section-label">Стоимость</div>
-        <h2 class="section-title">Тарифы</h2>
-
-        <div class="pricing-grid">
-            <div class="price-card">
-                <div class="price-name">Видимость</div>
-                <div class="price-amount">60 000 ₽</div>
-                <div class="price-period">в месяц</div>
-                <ul class="price-features">
-                    <li>Утренний брифинг в мессенджер</li>
-                    <li>Сигналы по команде</li>
-                    <li>Мониторинг исполнения</li>
-                    <li>Дашборд для управляющего</li>
-                </ul>
-                <div class="price-note">Интеграция: от 100 000 ₽</div>
-            </div>
-            <div class="price-card featured">
-                <div class="tag">Рекомендуем</div>
-                <div class="price-name">Видимость + Действие</div>
-                <div class="price-amount">120 000 ₽</div>
-                <div class="price-period">в месяц</div>
-                <ul class="price-features">
-                    <li>Всё из «Видимость»</li>
-                    <li>Рекомендации по действиям</li>
-                    <li>Черновики решений</li>
-                    <li>Настройка триггеров и алертов</li>
-                    <li>Мониторинг отдела продаж</li>
-                </ul>
-                <div class="price-note">Интеграция включена</div>
-            </div>
-        </div>
+<section id="pricing">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Тарифы</span>
+      <h2>Стоимость</h2>
     </div>
+    <div class="pricing-grid">
+      <div class="price-card reveal">
+        <h3>Видимость</h3>
+        <div class="price">60 000 &#8381;<span class="price-period"> / мес</span></div>
+        <div class="price-note">Интеграция: от 100 000 &#8381;</div>
+        <ul>
+          <li>Утренний брифинг собственнику</li>
+          <li>Сигналы по исполнению решений</li>
+          <li>Мониторинг рабочих чатов</li>
+        </ul>
+        <div class="target">Для собственника, который хочет видеть</div>
+      </div>
+      <div class="price-card featured reveal">
+        <h3>Видимость + Действие</h3>
+        <div class="price">120 000 &#8381;<span class="price-period"> / мес</span></div>
+        <div class="price-note">Интеграция включена</div>
+        <ul>
+          <li>Всё из тарифа &laquo;Видимость&raquo;</li>
+          <li>Рекомендации и черновики действий</li>
+          <li>Настройка триггеров и алертов</li>
+          <li>Рабочая панель для управляющего</li>
+        </ul>
+        <div class="target">Собственник + управляющий работают с системой</div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-section fade-in">
-    <div class="container">
-        <div class="section-label">Начните сейчас</div>
-        <h2 class="section-title">Бесплатный аудит за 3 дня</h2>
-        <p class="section-desc">Подключим 2 рабочих чата вашей команды. Через 3 дня покажем, что вы не видели — и сколько это вам стоит. Без обязательств. Без внедрения. Просто результат.</p>
-        <a href="https://t.me/Urlexx" class="cta-primary">Начать бесплатный аудит →</a>
-        <span class="cta-micro">Обычно записываемся на 3–5 дней вперёд</span>
-    </div>
+<section id="cta" class="cta-final">
+  <div class="container reveal">
+    <span class="section-label">Начать</span>
+    <h2>Бесплатный аудит за 3 дня</h2>
+    <p class="subtitle">Подключим 2 рабочих чата вашей команды. Через 3 дня покажем, что вы не видели — и сколько это вам стоит. Без обязательств. Без внедрения. Просто результат.</p>
+    <a href="https://t.me/Urlexx" class="btn">Начать бесплатный аудит &#8594;</a>
+    <span class="btn-micro">Обычно записываемся на 3–5 дней вперёд</span>
+  </div>
 </section>
 
 <footer>
-    <div class="container">
-        © 2026 AI First. Все права защищены.
-    </div>
+  <div class="container">
+    <p>&copy; 2026 AI First. Все права защищены.</p>
+  </div>
 </footer>
 
 <script>
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+document.addEventListener('DOMContentLoaded',function(){
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}
+    });
+  },{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
+  document.querySelectorAll('.faq-q').forEach(function(q){
+    q.addEventListener('click',function(){q.closest('.faq-item').classList.toggle('open')});
+  });
+});
 </script>
-
 </body>
 </html>
