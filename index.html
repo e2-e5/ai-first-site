@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI FIRST | Управление бизнесом через ИИ</title>
+    <meta name="description" content="AI FIRST — внедрение искусственного интеллекта в бизнес-процессы. Управляйте бизнесом в 10 раз быстрее.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nexus: {
+                            900: '#0f172a',
+                            800: '#1e293b',
+                            700: '#334155',
+                            600: '#475569',
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Space Grotesk', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0f172a; color: #e2e8f0; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Space Grotesk', sans-serif; }
+
+        /* Navbar blur */
+        .nav-blur { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+        .nav-scrolled { background: rgba(15, 23, 42, 0.85); border-bottom: 1px solid rgba(37, 99, 235, 0.15); }
+
+        /* Blob animation */
+        @keyframes blob {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -50px) scale(1.1); }
+            50% { transform: translate(-20px, 20px) scale(0.9); }
+            75% { transform: translate(20px, 40px) scale(1.05); }
+        }
+        .blob { animation: blob 8s ease-in-out infinite; }
+        .blob-delay { animation-delay: 2s; }
+        .blob-delay-2 { animation-delay: 4s; }
+
+        /* Pulse */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+            50% { box-shadow: 0 0 0 12px rgba(37, 99, 235, 0); }
+        }
+        .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+
+        /* Card hover */
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(37, 99, 235, 0.15); border-color: rgba(37, 99, 235, 0.4); }
+
+        /* Fade in */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeInUp 0.6s ease-out forwards; }
+        .fade-in-delay-1 { animation-delay: 0.1s; opacity: 0; }
+        .fade-in-delay-2 { animation-delay: 0.2s; opacity: 0; }
+        .fade-in-delay-3 { animation-delay: 0.3s; opacity: 0; }
+
+        /* Range slider */
+        input[type="range"] {
+            -webkit-appearance: none; appearance: none;
+            width: 100%; height: 6px; border-radius: 3px;
+            background: #334155; outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 20px; height: 20px; border-radius: 50%;
+            background: #2563EB; cursor: pointer;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px; height: 20px; border-radius: 50%;
+            background: #2563EB; cursor: pointer; border: none;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
+        }
+
+        /* Status bar animation */
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        .status-pulse { animation: statusPulse 2s ease-in-out infinite; }
+
+        /* Skeleton loading */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s ease-in-out infinite;
+        }
+
+        /* Tag hover */
+        .tag-btn { transition: all 0.2s ease; }
+        .tag-btn:hover { background: #2563EB; color: white; transform: scale(1.05); }
+
+        /* Metric counter */
+        @keyframes countUp {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Grid lines background */
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(37, 99, 235, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(37, 99, 235, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            animation: bounce 2s ease-in-out infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-8px); }
+            60% { transform: translateY(-4px); }
+        }
+    </style>
+</head>
+<body class="grid-bg min-h-screen">
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 nav-blur transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="#" class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <i data-lucide="brain" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <span class="font-heading font-bold text-xl text-white">AI FIRST</span>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#use-cases" class="text-sm text-slate-400 hover:text-white transition-colors">Решения</a>
+                    <a href="#generator" class="text-sm text-slate-400 hover:text-white transition-colors">Генератор</a>
+                    <a href="#dashboard" class="text-sm text-slate-400 hover:text-white transition-colors">Контроль</a>
+                    <a href="#calculator" class="text-sm text-slate-400 hover:text-white transition-colors">Калькулятор</a>
+                    <a href="https://calendly.com/urlexx/30min" target="_blank" rel="noopener"
+                       class="bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium px-5 py-2 rounded-[7px] transition-colors">
+                        Записаться на демо
+                    </a>
+                </div>
+                <button id="mobile-menu-btn" class="md:hidden text-slate-400 hover:text-white">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-nexus-900/95 border-t border-slate-800">
+            <div class="px-4 py-4 space-y-3">
+                <a href="#use-cases" class="block text-slate-400 hover:text-white transition-colors py-2">Решения</a>
+                <a href="#generator" class="block text-slate-400 hover:text-white transition-colors py-2">Генератор</a>
+                <a href="#dashboard" class="block text-slate-400 hover:text-white transition-colors py-2">Контроль</a>
+                <a href="#calculator" class="block text-slate-400 hover:text-white transition-colors py-2">Калькулятор</a>
+                <a href="https://calendly.com/urlexx/30min" target="_blank" rel="noopener"
+                   class="block bg-blue-600 text-white text-center font-medium px-5 py-2 rounded-[7px]">
+                    Записаться на демо
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+        <!-- Blobs -->
+        <div class="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl blob"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/8 rounded-full blur-3xl blob blob-delay"></div>
+        <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-indigo-500/6 rounded-full blur-3xl blob blob-delay-2"></div>
+
+        <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-8 fade-in">
+                <div class="w-2 h-2 bg-blue-500 rounded-full status-pulse"></div>
+                <span class="text-sm text-blue-400 font-medium">Платформа ИИ‑автоматизации</span>
+            </div>
+
+            <h1 class="text-4xl sm:text-5xl lg:text-7xl font-heading font-bold text-white leading-tight mb-6 fade-in fade-in-delay-1">
+                Управляйте бизнесом<br>
+                <span class="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">в 10 раз быстрее</span> с ИИ
+            </h1>
+
+            <p class="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto mb-10 fade-in fade-in-delay-2">
+                Подключите интеллектуальных агентов к вашим бизнес‑процессам. Автоматизация документооборота, аналитики, поддержки и десятков операций — без замены текущих систем.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 fade-in fade-in-delay-3">
+                <a href="https://calendly.com/urlexx/30min" target="_blank" rel="noopener"
+                   class="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-3.5 rounded-[7px] transition-all pulse-glow flex items-center gap-2">
+                    <i data-lucide="calendar" class="w-5 h-5"></i>
+                    Записаться на демо
+                </a>
+                <a href="#calculator"
+                   class="border border-slate-700 hover:border-blue-500/50 text-slate-300 hover:text-white font-semibold px-8 py-3.5 rounded-[7px] transition-all flex items-center gap-2">
+                    <i data-lucide="calculator" class="w-5 h-5"></i>
+                    Рассчитать выгоду
+                </a>
+            </div>
+
+            <!-- Metrics -->
+            <div class="grid grid-cols-3 gap-8 max-w-xl mx-auto">
+                <div class="text-center">
+                    <div class="text-3xl sm:text-4xl font-heading font-bold text-white mb-1">×10</div>
+                    <div class="text-sm text-slate-500">Скорость процессов</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl sm:text-4xl font-heading font-bold text-white mb-1">24/7</div>
+                    <div class="text-sm text-slate-500">Без перерывов</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl sm:text-4xl font-heading font-bold text-white mb-1">−80%</div>
+                    <div class="text-sm text-slate-500">Рутинных задач</div>
+                </div>
+            </div>
+
+            <!-- Scroll indicator -->
+            <div class="mt-16 scroll-indicator">
+                <i data-lucide="chevron-down" class="w-6 h-6 text-slate-600 mx-auto"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section id="use-cases" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-4">
+                    <i data-lucide="layers" class="w-4 h-4 text-blue-400"></i>
+                    <span class="text-sm text-blue-400 font-medium">Примеры использования</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-heading font-bold text-white mb-4">ИИ для каждого процесса</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">12 готовых решений, которые можно внедрить в вашу компанию уже сегодня</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                <!-- Card 1 -->
+                <div class="card-hover bg-nexus-800 border border-slate-700/50 rounded-[1rem] p-6">
+                    <div class="w-10 h-10 bg-blue-600/15 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="file-search" class="w-5 h-5 text-blue-400"></i>
+                    </div>
+                    <h3 class="font-heading font-semibold text-white mb-2">Анализ документов</h3>
+                    <p class="text-sm text-slate-400 mb-4">ИИ извлекает данные из договоров, счетов и отчётов за секунды</p>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span class="text-xs font-medium text-blue-400">90% меньше ручного чтения</span>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="card-hover bg-nexus-800 border border-slate-700/50 rounded-[1rem] p-6">
+                    <div class="w-10 h-10 bg-green-600/15 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="users" class="w-5 h-5 text-green-400"></i>
+                    </div>
+                    <h3 class="font-heading font-semibold text-white mb-2">HR и Рекрутинг</h3>
+                    <p class="text-sm text-slate-400 mb-4">Скрининг резюме, первичные интервью и оценка кандидатов на автопилоте</p>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span class="text-xs font-medium text-green-400">Найм в 3 раза быстрее</span>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="card-hover bg-nexus-800 border border-slate-700/50 rounded-[1rem] p-6">
+                    <div class="w-10 h-10 bg-blue-600/15 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="truck" class="w-5 h-5 text-blue-400"></i>
+                    </div>
+                    <h3 class="font-heading font-semibold text-white mb-2">Цепочки поставок</h3>
+                    <p class="text-sm text-slate-400 mb-4">Предиктивное управление запасами и оптимизация логистики</p>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span class="text-xs font-medium text-blue-400">25% снижение нехватки</span>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="card-hover bg-nexus-800 border border-slate-700/50 rounded-[1rem] p-6">
+                    <div class="w-10 h-10 bg-yellow-600/15 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-yellow-400"></i>
+                    </div>
+                    <h3 class="font-heading font-semibold text-white mb-2">Риски и Комплаенс</h3>
+                    <p class="text-sm text-slate-400 mb-4">Автоматический мониторинг нормативных требований и оценка рисков</p>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                        <span class="text-xs font-medium text-yellow-400">100% готовность к аудиту</span>
+                    </div>
+                </div>
+                <!-- Card 5 -->
+                <div class="card-hover bg-nexus-800 border border-slate-700/50 rounded-[1rem] p-6">
+                    <div class="w-10 h-10 bg-green-600/15 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="trending-up" class="w-5 h-5 text-green-400"></i>
+                    </div>
+                    <h3 class="font-heading font-semibold text-white mb-2">Финансовый прогноз</h3>
+                    <p class="text-sm text-slate-400 mb-4">ML‑модели для прогнозирования выручки, расходов и денежного потока</p>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span class="text-xs font-medium text-green-400">+15% точность прогноза</span>
+                    </div>
+                </div>
+                <!-- Card 6 -->
+                <div class="card-hover bg-nexus-800 border border-slate-700/50 rounded-[1rem] p-6">
+                    <div class="w-10 h-10 bg-blue-600/15 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="workflow" class="w-5 h-5 text-blue-400"></i>
+                    </div>
+                    <h3 class="font-heading font-semibold text-white mb-2">Process Mining</h3>
+                    <p class="text-sm text-slate-400 mb-4">Анализ и визуализация бизнес‑процессов для выявления узких мест</p>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span class="text-xs font-medium text-blue-400">Мгновенная оптимизация</span>
+                    </div>
+                </div>
+                <!-- Card 7 -->
+                <div class="card-hover bg-nexus-800 border border-slate-700/50 rounded-[1rem] p-6">
+                    <div class="w-10 h-10 bg-green-600/15 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="headphones" class="w-5 h-5 text-green-400"></i>
+                    </div>
+                    <h3 class="font-heading font-semibold text-white mb-2">Интеллектуальный Сервис</h3>
+                    <p class="text-sm text-slate-400 mb-4">ИИ‑агенты для поддержки клиентов: ответы, маршрутизация, эскалация</p>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span class="text-xs font-medium text-green-400">CSAT 4.9/5</span>
+                    </div>
+                </div>
+                <!-- Card 8 -->
+                <div class="card-hover bg-nexus-800 border border-slate-700/50 rounded-[1rem] p-6">
+                    <div class="w-10 h-10 bg-blue-600/15 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-400"></i>
+                    </div>
+                    <h3 class="font-heading font-semibold text-white mb-2">Рыночная Аналитика</h3>
+                    <p class="text-sm text-slate-400 mb-4">Мониторинг конкурентов, трендов и рыночных сигналов в реальном времени</p>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span class="text-xs font-medium text-blue-400">Опережение конкурентов</span>
+                    </div>
+                </div>
+                <!-- Card 9 -->
+                <div class="card-hover bg-nexus-800 border border-slate-700/50 rounded-[1rem] p-6">
+                    <div class="w-10 h-10 bg-red-600/15 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="shield" class="w-5 h-5 text-red-400"></i>
+                    </div>
+                    <h3 class="font-heading font-semibold text-white mb-2">Кибер‑иммунитет</h3>
+                    <p class="text-sm text-slate-400 mb-4">ИИ‑защита от угроз: детекция аномалий, предотвращение атак</p>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                        <span class="text-xs font-medium text-red-400">Блокировка 99.9%</span>
+                    </div>
+                </div>
+                <!-- Card 10 -->
+                <div class="card-hover bg-nexus-800 border border-slate-700/50 rounded-[1rem] p-6">
+                    <div class="w-10 h-10 bg-green-600/15 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="settings" class="w-5 h-5 text-green-400"></i>
+                    </div>
+                    <h3 class="font-heading font-semibold text-white mb-2">Предиктивное обслуживание</h3>
+                    <p class="text-sm text-slate-400 mb-4">Прогнозирование отказов оборудования до их возникновения</p>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span class="text-xs font-medium text-green-400">95% снижение простоев</span>
+                    </div>
+                </div>
+                <!-- Card 11 -->
+                <div class="card-hover bg-nexus-800 border border-slate-700/50 rounded-[1rem] p-6">
+                    <div class="w-10 h-10 bg-blue-600/15 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="target" class="w-5 h-5 text-blue-400"></i>
+                    </div>
+                    <h3 class="font-heading font-semibold text-white mb-2">Персонализация продаж</h3>
+                    <p class="text-sm text-slate-400 mb-4">Индивидуальные офферы и рекомендации для каждого клиента</p>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span class="text-xs font-medium text-blue-400">Рост LTV на 40%</span>
+                    </div>
+                </div>
+                <!-- Card 12 -->
+                <div class="card-hover bg-nexus-800 border border-slate-700/50 rounded-[1rem] p-6">
+                    <div class="w-10 h-10 bg-yellow-600/15 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="database" class="w-5 h-5 text-yellow-400"></i>
+                    </div>
+                    <h3 class="font-heading font-semibold text-white mb-2">Корпоративная База Знаний</h3>
+                    <p class="text-sm text-slate-400 mb-4">Умный поиск по всей документации компании с ответами на естественном языке</p>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                        <span class="text-xs font-medium text-yellow-400">−80% времени поиска</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Solution Generator -->
+    <section id="generator" class="py-24 relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-4">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-blue-400"></i>
+                    <span class="text-sm text-blue-400 font-medium">AI Генератор Решений</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-heading font-bold text-white mb-4">Опишите проблему — ИИ предложит решение</h2>
+                <p class="text-slate-400">Введите описание бизнес‑задачи, и система подберёт оптимальный сценарий внедрения</p>
+            </div>
+
+            <div class="bg-nexus-800 border border-slate-700/50 rounded-[1rem] p-8">
+                <div class="mb-6">
+                    <textarea id="problem-input" rows="3"
+                        class="w-full bg-nexus-900 border border-slate-700 rounded-[7px] px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors resize-none"
+                        placeholder="Например: Наши менеджеры тратят 4 часа в день на обработку входящих заявок вручную..."></textarea>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mb-6">
+                    <button class="tag-btn bg-nexus-900 border border-slate-700 text-slate-400 text-sm px-4 py-1.5 rounded-full" onclick="setTag(this)">
+                        Логистика склада
+                    </button>
+                    <button class="tag-btn bg-nexus-900 border border-slate-700 text-slate-400 text-sm px-4 py-1.5 rounded-full" onclick="setTag(this)">
+                        Обработка заявок
+                    </button>
+                    <button class="tag-btn bg-nexus-900 border border-slate-700 text-slate-400 text-sm px-4 py-1.5 rounded-full" onclick="setTag(this)">
+                        Контроль качества
+                    </button>
+                    <button class="tag-btn bg-nexus-900 border border-slate-700 text-slate-400 text-sm px-4 py-1.5 rounded-full" onclick="setTag(this)">
+                        Продажи B2B
+                    </button>
+                </div>
+
+                <button onclick="generateSolutions()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-[7px] transition-colors flex items-center justify-center gap-2">
+                    <i data-lucide="wand-2" class="w-5 h-5"></i>
+                    Сгенерировать решение
+                </button>
+
+                <!-- Generated solutions placeholder -->
+                <div id="solutions-container" class="hidden mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Global Control Dashboard -->
+    <section id="dashboard" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-4">
+                    <i data-lucide="monitor" class="w-4 h-4 text-blue-400"></i>
+                    <span class="text-sm text-blue-400 font-medium">Режим Глобального Контроля</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-heading font-bold text-white mb-4">Все процессы — на одном экране</h2>
+                <p class="text-slate-400">Мониторинг эффективности ИИ‑агентов в реальном времени</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Processes Grid -->
+                <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4" id="processes-grid">
+                    <!-- Process cards will be generated by JS -->
+                </div>
+
+                <!-- Diagnostics Panel -->
+                <div class="bg-nexus-800 border border-slate-700/50 rounded-[1rem] p-6">
+                    <div class="flex items-center gap-2 mb-6">
+                        <i data-lucide="activity" class="w-5 h-5 text-blue-400"></i>
+                        <h3 class="font-heading font-semibold text-white">Панель диагностики</h3>
+                    </div>
+
+                    <div class="space-y-5">
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-slate-400">Загрузка системы</span>
+                                <span class="text-white font-medium" id="diag-cpu">67%</span>
+                            </div>
+                            <div class="w-full bg-nexus-900 rounded-full h-2">
+                                <div id="diag-cpu-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-1000" style="width: 67%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-slate-400">Обработано запросов</span>
+                                <span class="text-white font-medium" id="diag-requests">12,847</span>
+                            </div>
+                            <div class="w-full bg-nexus-900 rounded-full h-2">
+                                <div id="diag-requests-bar" class="bg-green-500 h-2 rounded-full transition-all duration-1000" style="width: 78%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-slate-400">Точность моделей</span>
+                                <span class="text-white font-medium" id="diag-accuracy">96.3%</span>
+                            </div>
+                            <div class="w-full bg-nexus-900 rounded-full h-2">
+                                <div id="diag-accuracy-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-1000" style="width: 96.3%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-slate-400">Время отклика</span>
+                                <span class="text-white font-medium" id="diag-latency">142ms</span>
+                            </div>
+                            <div class="w-full bg-nexus-900 rounded-full h-2">
+                                <div id="diag-latency-bar" class="bg-green-500 h-2 rounded-full transition-all duration-1000" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-slate-400">Активных агентов</span>
+                                <span class="text-white font-medium" id="diag-agents">24 / 24</span>
+                            </div>
+                            <div class="w-full bg-nexus-900 rounded-full h-2">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-6 border-t border-slate-700/50">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-2 h-2 bg-green-500 rounded-full status-pulse"></div>
+                            <span class="text-sm text-green-400 font-medium">Система работает штатно</span>
+                        </div>
+                        <p class="text-xs text-slate-500">Последнее обновление: <span id="last-update">только что</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculator Section -->
+    <section id="calculator" class="py-24 relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-4">
+                    <i data-lucide="calculator" class="w-4 h-4 text-blue-400"></i>
+                    <span class="text-sm text-blue-400 font-medium">Калькулятор Эффективности</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-heading font-bold text-white mb-4">Сколько вы сэкономите с ИИ?</h2>
+                <p class="text-slate-400">Настройте параметры под ваш бизнес и узнайте потенциальную выгоду</p>
+            </div>
+
+            <div class="bg-nexus-800 border border-slate-700/50 rounded-[1rem] p-8">
+                <div class="space-y-8">
+                    <!-- Slider 1: Employees -->
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <label class="text-sm text-slate-400">Количество сотрудников</label>
+                            <span id="employees-value" class="text-lg font-heading font-bold text-white">50</span>
+                        </div>
+                        <input type="range" id="employees" min="5" max="500" value="50" step="5" oninput="updateCalculator()">
+                        <div class="flex justify-between text-xs text-slate-600 mt-1">
+                            <span>5</span><span>500</span>
+                        </div>
+                    </div>
+
+                    <!-- Slider 2: Salary -->
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <label class="text-sm text-slate-400">Средняя зарплата, ₽/мес</label>
+                            <span id="salary-value" class="text-lg font-heading font-bold text-white">120 000 ₽</span>
+                        </div>
+                        <input type="range" id="salary" min="40000" max="500000" value="120000" step="10000" oninput="updateCalculator()">
+                        <div class="flex justify-between text-xs text-slate-600 mt-1">
+                            <span>40 000 ₽</span><span>500 000 ₽</span>
+                        </div>
+                    </div>
+
+                    <!-- Slider 3: Revenue -->
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <label class="text-sm text-slate-400">Годовая выручка, ₽</label>
+                            <span id="revenue-value" class="text-lg font-heading font-bold text-white">50 000 000 ₽</span>
+                        </div>
+                        <input type="range" id="revenue" min="1000000" max="100000000" value="50000000" step="1000000" oninput="updateCalculator()">
+                        <div class="flex justify-between text-xs text-slate-600 mt-1">
+                            <span>1 млн ₽</span><span>100 млн ₽</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div class="mt-10 pt-8 border-t border-slate-700/50">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <div class="bg-nexus-900 rounded-[1rem] p-6 text-center border border-slate-700/30">
+                            <div class="text-sm text-slate-400 mb-2">Экономия на ФОТ / год</div>
+                            <div id="calc-fot" class="text-2xl font-heading font-bold text-blue-400">14 400 000 ₽</div>
+                        </div>
+                        <div class="bg-nexus-900 rounded-[1rem] p-6 text-center border border-slate-700/30">
+                            <div class="text-sm text-slate-400 mb-2">Рост выручки / год</div>
+                            <div id="calc-revenue" class="text-2xl font-heading font-bold text-green-400">7 500 000 ₽</div>
+                        </div>
+                        <div class="bg-nexus-900 rounded-[1rem] p-6 text-center border border-blue-500/30 border-2">
+                            <div class="text-sm text-slate-400 mb-2">Общая выгода / год</div>
+                            <div id="calc-total" class="text-2xl font-heading font-bold text-white">21 900 000 ₽</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 text-center">
+                        <a href="https://calendly.com/urlexx/30min" target="_blank" rel="noopener"
+                           class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-3.5 rounded-[7px] transition-all">
+                            <i data-lucide="calendar" class="w-5 h-5"></i>
+                            Обсудить внедрение
+                        </a>
+                        <p class="text-xs text-slate-500 mt-3">* Расчёт основан на средних показателях внедрения ИИ в отрасли</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <i data-lucide="brain" class="w-4 h-4 text-white"></i>
+                    </div>
+                    <span class="font-heading font-bold text-white">AI FIRST</span>
+                </div>
+                <p class="text-sm text-slate-500">© 2026 AI FIRST. Все права защищены.</p>
+                <div class="flex items-center gap-4">
+                    <a href="https://calendly.com/urlexx/30min" target="_blank" rel="noopener" class="text-sm text-slate-400 hover:text-white transition-colors">Записаться на демо</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ===== Navbar scroll =====
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('nav-scrolled');
+            } else {
+                navbar.classList.remove('nav-scrolled');
+            }
+        });
+
+        // ===== Mobile menu =====
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        document.querySelectorAll('#mobile-menu a').forEach(a => {
+            a.addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        // ===== AI Generator =====
+        function setTag(btn) {
+            document.getElementById('problem-input').value = btn.textContent.trim() + ': ';
+            document.getElementById('problem-input').focus();
+        }
+
+        const solutionTemplates = [
+            { icon: 'bot', title: 'ИИ‑агент обработки', desc: 'Автоматическая маршрутизация и классификация входящих запросов с точностью 97%' },
+            { icon: 'zap', title: 'Оптимизация процесса', desc: 'Сокращение времени обработки на 80% за счёт предиктивной автоматизации' },
+            { icon: 'line-chart', title: 'Аналитический дашборд', desc: 'Отслеживание KPI в реальном времени с автоматическими рекомендациями' },
+        ];
+
+        function generateSolutions() {
+            const container = document.getElementById('solutions-container');
+            container.innerHTML = '';
+            container.classList.remove('hidden');
+            container.style.display = 'grid';
+
+            solutionTemplates.forEach((sol, i) => {
+                const card = document.createElement('div');
+                card.className = 'skeleton rounded-[1rem] h-48';
+                container.appendChild(card);
+
+                setTimeout(() => {
+                    card.className = 'bg-nexus-900 border border-slate-700/50 rounded-[1rem] p-5 fade-in';
+                    card.innerHTML = `
+                        <div class="w-9 h-9 bg-blue-600/15 rounded-lg flex items-center justify-center mb-3">
+                            <i data-lucide="${sol.icon}" class="w-5 h-5 text-blue-400"></i>
+                        </div>
+                        <h4 class="font-heading font-semibold text-white text-sm mb-2">${sol.title}</h4>
+                        <p class="text-xs text-slate-400">${sol.desc}</p>
+                    `;
+                    lucide.createIcons();
+                }, 800 + i * 400);
+            });
+        }
+
+        // ===== Dashboard Processes =====
+        const processes = [
+            { name: 'Сверка счетов', icon: 'receipt', efficiency: 94 },
+            { name: 'Онбординг клиентов', icon: 'user-plus', efficiency: 88 },
+            { name: 'Балансировка нагрузки', icon: 'scale', efficiency: 97 },
+            { name: 'Пополнение запасов', icon: 'package', efficiency: 82 },
+            { name: 'Соц. сантимент', icon: 'message-circle', efficiency: 91 },
+            { name: 'Комплаенс проверка', icon: 'clipboard-check', efficiency: 96 },
+        ];
+
+        function getStatusColor(eff) {
+            if (eff >= 95) return { bg: 'bg-blue-500/15', text: 'text-blue-400', dot: 'bg-blue-500', bar: 'bg-blue-500', label: 'ОПТИМАЛЬНО' };
+            if (eff >= 85) return { bg: 'bg-green-500/15', text: 'text-green-400', dot: 'bg-green-500', bar: 'bg-green-500', label: 'НОРМА' };
+            if (eff >= 70) return { bg: 'bg-yellow-500/15', text: 'text-yellow-400', dot: 'bg-yellow-500', bar: 'bg-yellow-500', label: 'ВНИМАНИЕ' };
+            return { bg: 'bg-red-500/15', text: 'text-red-400', dot: 'bg-red-500', bar: 'bg-red-500', label: 'КРИТИЧНО' };
+        }
+
+        function renderProcesses() {
+            const grid = document.getElementById('processes-grid');
+            grid.innerHTML = '';
+            processes.forEach((p, i) => {
+                const s = getStatusColor(p.efficiency);
+                const card = document.createElement('div');
+                card.className = 'bg-nexus-800 border border-slate-700/50 rounded-[1rem] p-5';
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 ${s.bg} rounded-lg flex items-center justify-center">
+                                <i data-lucide="${p.icon}" class="w-5 h-5 ${s.text}"></i>
+                            </div>
+                            <span class="text-sm font-medium text-white">${p.name}</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <div class="w-2 h-2 ${s.dot} rounded-full status-pulse"></div>
+                            <span class="text-xs ${s.text} font-medium">${s.label}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-end justify-between mb-2">
+                        <span class="text-2xl font-heading font-bold text-white">${p.efficiency}%</span>
+                        <span class="text-xs text-slate-500">эффективность</span>
+                    </div>
+                    <div class="w-full bg-nexus-900 rounded-full h-1.5">
+                        <div class="${s.bar} h-1.5 rounded-full transition-all duration-1000" style="width: ${p.efficiency}%"></div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        renderProcesses();
+
+        // Update processes every 2 seconds
+        setInterval(() => {
+            processes.forEach(p => {
+                const delta = Math.floor(Math.random() * 7) - 3;
+                p.efficiency = Math.max(65, Math.min(99, p.efficiency + delta));
+            });
+            renderProcesses();
+
+            // Update diagnostics
+            const cpu = 55 + Math.floor(Math.random() * 30);
+            document.getElementById('diag-cpu').textContent = cpu + '%';
+            document.getElementById('diag-cpu-bar').style.width = cpu + '%';
+
+            const reqs = 12000 + Math.floor(Math.random() * 2000);
+            document.getElementById('diag-requests').textContent = reqs.toLocaleString('ru-RU');
+            document.getElementById('diag-requests-bar').style.width = Math.min(100, reqs / 160) + '%';
+
+            const acc = (94 + Math.random() * 4).toFixed(1);
+            document.getElementById('diag-accuracy').textContent = acc + '%';
+            document.getElementById('diag-accuracy-bar').style.width = acc + '%';
+
+            const lat = 100 + Math.floor(Math.random() * 100);
+            document.getElementById('diag-latency').textContent = lat + 'ms';
+            document.getElementById('diag-latency-bar').style.width = Math.max(50, 100 - lat / 3) + '%';
+
+            document.getElementById('last-update').textContent = 'только что';
+        }, 2000);
+
+        // ===== Calculator =====
+        function formatRub(n) {
+            return n.toLocaleString('ru-RU') + ' ₽';
+        }
+
+        function updateCalculator() {
+            const employees = parseInt(document.getElementById('employees').value);
+            const salary = parseInt(document.getElementById('salary').value);
+            const revenue = parseInt(document.getElementById('revenue').value);
+
+            document.getElementById('employees-value').textContent = employees;
+            document.getElementById('salary-value').textContent = formatRub(salary);
+            document.getElementById('revenue-value').textContent = formatRub(revenue);
+
+            // 20% of employees' costs saved (automation of routine)
+            const fotSavings = Math.round(employees * salary * 12 * 0.20);
+            // 15% revenue growth from AI optimization
+            const revenueGrowth = Math.round(revenue * 0.15);
+            const total = fotSavings + revenueGrowth;
+
+            document.getElementById('calc-fot').textContent = formatRub(fotSavings);
+            document.getElementById('calc-revenue').textContent = formatRub(revenueGrowth);
+            document.getElementById('calc-total').textContent = formatRub(total);
+        }
+
+        updateCalculator();
+
+        // ===== Init Lucide Icons =====
+        lucide.createIcons();
+    </script>
+</body>
+</html>
