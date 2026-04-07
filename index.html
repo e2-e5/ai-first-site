@@ -136,6 +136,31 @@
     .small { font-size: var(--small); color: var(--muted); line-height: 1.45; }
     .hero-quote { font-family: Manrope, Inter, sans-serif; font-size: clamp(22px, 2.6vw, 36px); line-height: 1.12; color: var(--text); max-width: 15ch; }
     .mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .visual-frame {
+      position: relative;
+      overflow: hidden;
+      min-height: 420px;
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: var(--shadow);
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+    }
+    .visual-frame img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transform: scale(1.04);
+      filter: saturate(1.06) contrast(1.02);
+    }
+    .visual-frame::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(7,17,31,0.08), rgba(7,17,31,0.36));
+    }
+    .visual-badge {
+      position: absolute; left: 18px; bottom: 18px; z-index: 2;
+      padding: 10px 14px; border-radius: 999px;
+      background: rgba(7,17,31,.72); border: 1px solid rgba(255,255,255,.1);
+      color: var(--text); font-size: 13px; backdrop-filter: blur(12px);
+    }
     .mini-box {
       padding: 18px;
       border-radius: 18px;
@@ -190,10 +215,11 @@
         <div class="eyebrow">AI First · отчётная презентация</div>
         <h1>AI First</h1>
         <p class="lead">AI-система управления для собственника бизнеса. Основной фокус — контроль исполнения, прозрачность команды, управленческий контур и внедрение AI-агентов в реальные процессы компании.</p>
+        <p class="small">Ставится в управленческий контур бизнеса и помогает собственнику быстрее видеть сбои, принимать решения и доводить их до результата.</p>
       </div>
-      <div class="panel card reveal-scale delay-1">
-        <h3>Коротко</h3>
-        <p>AI First ставится в управленческий контур бизнеса. Собственник получает более точную картину происходящего, быстрее видит сбои и принимает решения по фактическому состоянию команды, задач и клиентского потока.</p>
+      <div class="visual-frame reveal-scale delay-1">
+        <img src="https://raw.githubusercontent.com/e2-e5/ai-first-site/master/assets/ai-first-hero-visual.jpg" alt="AI First hero visual" />
+        <div class="visual-badge">AI management system for business owner</div>
       </div>
     </div>
     <div class="footer-note">AI First report deck · updated visual version</div>
@@ -224,11 +250,16 @@
         <div class="eyebrow">2. Проблема рынка</div>
         <h2>Почему это нужно</h2>
         <p>Собственник принимает решения, но часто не видит, как они доходят до исполнения. Верхнеуровневый отчёт редко показывает реальное состояние бизнеса на уровне задач, чатов, просрочек и разрывов между отделами.</p>
+        <div class="mini-grid">
+          <div class="mini-box"><b>Решения теряются</b><span class="small">часть задач выпадает уже через несколько дней</span></div>
+          <div class="mini-box"><b>Информация искажается</b><span class="small">на уровне доклада всё спокойно, в команде уже сбой</span></div>
+          <div class="mini-box"><b>Нет времени копать</b><span class="small">собственник не читает десятки чатов вручную</span></div>
+          <div class="mini-box"><b>Контроль размыт</b><span class="small">между решением и исполнением образуется разрыв</span></div>
+        </div>
       </div>
-      <div class="cards three-col">
-        <div class="panel card reveal-scale delay-1"><h3>Решения теряются</h3><p>Часть задач выпадает уже через несколько дней.</p></div>
-        <div class="panel card reveal-scale delay-2"><h3>Информация искажается</h3><p>На уровне доклада всё спокойно. На уровне команды уже накапливается сбой.</p></div>
-        <div class="panel card reveal-scale delay-3"><h3>Нет времени копать</h3><p>Собственник не читает десятки чатов и не собирает картину вручную.</p></div>
+      <div class="visual-frame reveal-scale delay-1">
+        <img src="https://raw.githubusercontent.com/e2-e5/ai-first-site/master/assets/ai-first-ops-visual.jpg" alt="AI First operations visual" />
+        <div class="visual-badge">Monitoring · execution · transparency</div>
       </div>
     </div>
   </section>
