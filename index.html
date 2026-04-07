@@ -21,12 +21,13 @@
       --accent-2: #8a7dff;
       --success: #7df0b8;
       --shadow: 0 24px 80px rgba(0,0,0,0.32);
+      --shadow-soft: 0 18px 42px rgba(0,0,0,0.24);
       --radius: 24px;
       --maxw: 1240px;
       --h1: clamp(40px, 7vw, 84px);
       --h2: clamp(30px, 4vw, 54px);
       --h3: clamp(18px, 2vw, 28px);
-      --body: clamp(16px, 1.35vw, 22px);
+      --body: clamp(16px, 1.25vw, 20px);
       --small: clamp(13px, 1vw, 16px);
     }
     * { box-sizing: border-box; }
@@ -35,10 +36,11 @@
     body {
       font-family: Inter, system-ui, sans-serif;
       color: var(--text);
-      background:
-        radial-gradient(circle at top, #11294a 0%, var(--bg) 45%, #040914 100%);
+      background: radial-gradient(circle at top, #11294a 0%, var(--bg) 45%, #040914 100%);
       overflow-y: auto;
     }
+    .progress { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.06); z-index: 30; }
+    .progress span { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); box-shadow: 0 0 18px rgba(98,230,255,.35); }
     .slide {
       min-height: 100vh;
       min-height: 100dvh;
@@ -59,13 +61,36 @@
         radial-gradient(circle at 15% 20%, rgba(98,230,255,0.14), transparent 30%),
         radial-gradient(circle at 85% 18%, rgba(138,125,255,0.18), transparent 25%),
         radial-gradient(circle at 50% 100%, rgba(255,255,255,0.05), transparent 28%);
-      z-index: -1;
+      z-index: -2;
     }
+    .slide::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(circle at center, rgba(0,0,0,.55), transparent 78%);
+      z-index: -1;
+      opacity: .25;
+    }
+    .ambient {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(40px);
+      opacity: .35;
+      animation: float 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .ambient.a { width: 260px; height: 260px; background: rgba(98,230,255,.18); top: 6%; right: 8%; }
+    .ambient.b { width: 220px; height: 220px; background: rgba(138,125,255,.16); bottom: 8%; left: 10%; animation-delay: -3s; }
     .wrap { width: min(100%, var(--maxw)); display: grid; gap: 24px; }
-    .hero { grid-template-columns: 1.15fr 0.85fr; align-items: end; }
+    .hero { grid-template-columns: 1.1fr .9fr; align-items: end; }
     .two-col { grid-template-columns: 1fr 1fr; align-items: start; }
     .three-col { grid-template-columns: repeat(3, 1fr); }
     .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .stack { display: grid; gap: 18px; }
     .eyebrow {
       display: inline-flex;
       padding: 10px 14px;
@@ -82,7 +107,7 @@
     h1 { font-family: Manrope, Inter, sans-serif; font-size: var(--h1); line-height: 0.94; letter-spacing: -0.05em; max-width: 10ch; }
     h2 { font-family: Manrope, Inter, sans-serif; font-size: var(--h2); line-height: 0.98; letter-spacing: -0.04em; max-width: 13ch; }
     h3 { font-size: var(--h3); line-height: 1.1; }
-    .lead { color: var(--muted); font-size: clamp(18px, 1.5vw, 24px); line-height: 1.5; max-width: 38ch; }
+    .lead { color: var(--muted); font-size: clamp(18px, 1.45vw, 23px); line-height: 1.5; max-width: 38ch; }
     .panel {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -91,36 +116,66 @@
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
     }
-    .card { padding: 24px; display: grid; gap: 14px; }
+    .card { padding: 24px; display: grid; gap: 14px; transform-style: preserve-3d; transition: transform .28s ease, border-color .28s ease, box-shadow .28s ease; }
+    .card:hover { transform: translateY(-4px); border-color: rgba(98,230,255,.34); box-shadow: 0 28px 70px rgba(0,0,0,.28); }
     .panel p, .list li, .metric-label { color: var(--muted); font-size: var(--body); line-height: 1.45; }
-    .metrics, .cards, .steps, .summary { display: grid; gap: 16px; }
+    .cards, .metrics { display: grid; gap: 16px; }
     .metrics { grid-template-columns: repeat(2, 1fr); }
-    .metric { padding: 22px; border-radius: 20px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
+    .metric {
+      padding: 22px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: var(--shadow-soft);
+    }
     .metric-number { font-size: clamp(34px, 4vw, 52px); line-height: 1; font-weight: 800; color: var(--text); margin-bottom: 10px; }
     .list { margin: 0; padding-left: 20px; display: grid; gap: 12px; }
+    .list.tight { gap: 10px; }
     .list li::marker { color: var(--accent); }
-    .quote { font-family: Manrope, Inter, sans-serif; font-size: clamp(28px, 4vw, 58px); line-height: 1.02; max-width: 14ch; }
+    .quote { font-family: Manrope, Inter, sans-serif; font-size: clamp(28px, 4vw, 58px); line-height: 1.02; max-width: 13ch; }
     .small { font-size: var(--small); color: var(--muted); line-height: 1.45; }
+    .mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .mini-box {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .mini-box b { display: block; margin-bottom: 8px; color: var(--text); font-size: 16px; }
     .table {
       width: 100%; border-collapse: collapse; font-size: 15px; overflow: hidden; border-radius: 18px;
       background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
     }
-    .table th, .table td { padding: 16px 18px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .table th, .table td { padding: 15px 16px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
     .table th { color: var(--accent); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
     .table td { color: var(--muted); }
     .table tr:last-child td { border-bottom: none; }
     .footer-note { position: absolute; left: 28px; bottom: 16px; color: rgba(255,255,255,.45); font-size: 12px; }
-    .progress { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.06); z-index: 20; }
-    .progress span { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
-    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s ease, transform .7s ease; }
-    .visible .reveal { opacity: 1; transform: translateY(0); }
+
+    .reveal { opacity: 0; transform: translateY(26px); transition: opacity .75s cubic-bezier(.19,1,.22,1), transform .75s cubic-bezier(.19,1,.22,1), filter .75s ease; filter: blur(10px); }
+    .reveal-left { transform: translateX(-34px); }
+    .reveal-right { transform: translateX(34px); }
+    .reveal-scale { transform: scale(.94); }
+    .visible .reveal, .visible .reveal-left, .visible .reveal-right, .visible .reveal-scale { opacity: 1; transform: translate(0,0) scale(1); filter: blur(0); }
     .delay-1 { transition-delay: 120ms; }
     .delay-2 { transition-delay: 240ms; }
     .delay-3 { transition-delay: 360ms; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-14px); }
+    }
+
     @media (max-width: 980px) {
-      .hero, .two-col, .three-col, .grid-2, .metrics { grid-template-columns: 1fr; }
+      .hero, .two-col, .three-col, .grid-2, .metrics, .mini-grid { grid-template-columns: 1fr; }
       .slide { padding: 20px; }
       h1 { max-width: 12ch; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; }
+      html { scroll-behavior: auto; }
+      .reveal, .reveal-left, .reveal-right, .reveal-scale { opacity: 1; transform: none; filter: none; }
     }
   </style>
 </head>
@@ -128,81 +183,83 @@
   <div class="progress"><span id="progressBar"></span></div>
 
   <section class="slide visible">
+    <div class="ambient a"></div><div class="ambient b"></div>
     <div class="wrap hero">
-      <div class="reveal">
+      <div class="stack reveal-left">
         <div class="eyebrow">AI First · отчётная презентация</div>
         <h1>AI First</h1>
         <p class="lead">AI-система управления для собственника бизнеса. Основной фокус — контроль исполнения, прозрачность команды, управленческий контур и внедрение AI-агентов в реальные процессы компании.</p>
       </div>
-      <div class="panel card reveal delay-1">
+      <div class="panel card reveal-scale delay-1">
         <h3>Коротко</h3>
-        <p>AI First ставится в управленческий контур бизнеса. Собственник получает более точную картину происходящего, быстрее видит сбои и принимает решения не по ощущениям, а по фактическому состоянию команды, задач и клиентского потока.</p>
+        <p>AI First ставится в управленческий контур бизнеса. Собственник получает более точную картину происходящего, быстрее видит сбои и принимает решения по фактическому состоянию команды, задач и клиентского потока.</p>
       </div>
     </div>
-    <div class="footer-note">AI First report deck · v1</div>
+    <div class="footer-note">AI First report deck · updated visual version</div>
   </section>
 
   <section class="slide">
+    <div class="ambient a"></div>
     <div class="wrap two-col">
-      <div class="reveal">
+      <div class="stack reveal-left">
         <div class="eyebrow">1. Позиционирование</div>
         <h2>Что такое AI First</h2>
-        <p class="lead">AI First — это не отдельный бот и не разовая автоматизация. Это слой управления, который помогает собственнику видеть реальное исполнение решений, состояние команды и узкие места в операционке.</p>
+        <p class="lead">Это слой управления, который помогает собственнику видеть реальное исполнение решений, состояние команды и узкие места в операционке.</p>
       </div>
-      <div class="panel card reveal delay-1">
-        <ul class="list">
-          <li>мониторинг исполнения решений</li>
-          <li>контроль задач и управленческого контура</li>
-          <li>усиление собственника и руководителя</li>
-          <li>внедрение AI-агентов в процессы компании</li>
-        </ul>
+      <div class="panel card reveal-right delay-1">
+        <div class="mini-grid">
+          <div class="mini-box"><b>Контроль исполнения</b><span class="small">какие решения дошли до действия, а какие застряли</span></div>
+          <div class="mini-box"><b>Прозрачность команды</b><span class="small">где зависания, перегрузка и провалы по срокам</span></div>
+          <div class="mini-box"><b>Управленческий контур</b><span class="small">сигналы для собственника и руководителя</span></div>
+          <div class="mini-box"><b>AI-агенты</b><span class="small">под реальные задачи бизнеса и руководителя</span></div>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="slide">
     <div class="wrap two-col">
-      <div class="panel card reveal">
+      <div class="panel card reveal-left">
         <div class="eyebrow">2. Проблема рынка</div>
         <h2>Почему это нужно</h2>
-        <p>Собственник принимает решения, но часто не видит, как они доходят до исполнения. Управляющий приносит верхнеуровневую картину, а реальное состояние бизнеса живёт в задачах, чатах, просрочках и разрывах между отделами.</p>
+        <p>Собственник принимает решения, но часто не видит, как они доходят до исполнения. Верхнеуровневый отчёт редко показывает реальное состояние бизнеса на уровне задач, чатов, просрочек и разрывов между отделами.</p>
       </div>
       <div class="cards three-col">
-        <div class="panel card reveal delay-1"><h3>Решения теряются</h3><p>Обсудили, зафиксировали, пошли дальше. Через неделю часть задач уже выпала из контура.</p></div>
-        <div class="panel card reveal delay-2"><h3>Информация искажается</h3><p>На уровне отчёта всё спокойно. На уровне команды уже копится задержка и шум.</p></div>
-        <div class="panel card reveal delay-3"><h3>Нет времени копать</h3><p>Собственник не читает десятки чатов и не собирает картину вручную.</p></div>
+        <div class="panel card reveal-scale delay-1"><h3>Решения теряются</h3><p>Часть задач выпадает уже через несколько дней.</p></div>
+        <div class="panel card reveal-scale delay-2"><h3>Информация искажается</h3><p>На уровне доклада всё спокойно. На уровне команды уже накапливается сбой.</p></div>
+        <div class="panel card reveal-scale delay-3"><h3>Нет времени копать</h3><p>Собственник не читает десятки чатов и не собирает картину вручную.</p></div>
       </div>
     </div>
   </section>
 
   <section class="slide">
     <div class="wrap two-col">
-      <div class="reveal">
+      <div class="stack reveal-left">
         <div class="eyebrow">3. Что делает продукт</div>
         <h2>Основные направления AI First</h2>
       </div>
       <div class="cards grid-2">
-        <div class="panel card reveal delay-1"><h3>Мониторинг команды</h3><p>Выявление задержек, зависаний, провалов в исполнении и слабых мест в ежедневной работе.</p></div>
-        <div class="panel card reveal delay-1"><h3>Контроль исполнения решений</h3><p>Понимание, какие решения реально доходят до выполнения, а какие зависают по дороге.</p></div>
-        <div class="panel card reveal delay-2"><h3>Контур продаж</h3><p>Мониторинг клиентского потока, коммуникаций, узких мест в обработке лидов и клиентском сервисе.</p></div>
-        <div class="panel card reveal delay-2"><h3>AI-агенты под процессы</h3><p>Разработка и внедрение AI-агентов / AI-copilot под конкретные задачи бизнеса и руководителя.</p></div>
+        <div class="panel card reveal-scale delay-1"><h3>Мониторинг команды</h3><p>Выявление задержек, зависаний и слабых мест в ежедневной работе.</p></div>
+        <div class="panel card reveal-scale delay-1"><h3>Контроль исполнения решений</h3><p>Понимание, какие решения реально доходят до выполнения.</p></div>
+        <div class="panel card reveal-scale delay-2"><h3>Контур продаж</h3><p>Мониторинг клиентского потока, коммуникаций и узких мест в обработке лидов.</p></div>
+        <div class="panel card reveal-scale delay-2"><h3>AI-агенты под процессы</h3><p>Внедрение AI-агентов / AI-copilot под конкретные задачи бизнеса и руководителя.</p></div>
       </div>
     </div>
   </section>
 
   <section class="slide">
     <div class="wrap two-col">
-      <div class="panel card reveal">
+      <div class="panel card reveal-left">
         <div class="eyebrow">4. Для кого</div>
         <h2>Целевая аудитория</h2>
         <p>Клиенты AI First — собственники бизнеса и топ-руководители компаний, которым нужен более прозрачный и управляемый контур принятия решений.</p>
       </div>
-      <div class="panel card reveal delay-1">
-        <ul class="list">
+      <div class="panel card reveal-right delay-1">
+        <ul class="list tight">
           <li>собственники, у которых рост упирается в управляемость</li>
           <li>руководители, которым нужен контроль исполнения без ручного микроменеджмента</li>
-          <li>компании, где ключевая проблема — не идея, а дисциплина исполнения</li>
-          <li>бизнесы, которым нужен AI в операционке, а не витринный пилот</li>
+          <li>компании, где ключевая проблема — дисциплина исполнения</li>
+          <li>бизнесы, которым нужен AI в операционке</li>
         </ul>
       </div>
     </div>
@@ -210,43 +267,43 @@
 
   <section class="slide">
     <div class="wrap">
-      <div class="reveal">
+      <div class="stack reveal-left">
         <div class="eyebrow">5. Формат работы</div>
         <h2>Как работает внедрение</h2>
       </div>
       <div class="cards three-col">
-        <div class="panel card reveal delay-1"><h3>Диагностика</h3><p>Разбор текущей операционки, точек потери контроля, контуров задач, чатов и решений.</p></div>
-        <div class="panel card reveal delay-2"><h3>Проектирование</h3><p>Выбор сценариев, где AI даёт реальный выигрыш, а не красивую демонстрацию.</p></div>
-        <div class="panel card reveal delay-3"><h3>Внедрение и обкатка</h3><p>Запуск AI-агентов в реальные процессы, сбор практики, корректировка и усиление модели.</p></div>
+        <div class="panel card reveal-scale delay-1"><h3>Диагностика</h3><p>Разбор текущей операционки, точек потери контроля, контуров задач, чатов и решений.</p></div>
+        <div class="panel card reveal-scale delay-2"><h3>Проектирование</h3><p>Выбор сценариев, где AI даёт реальный выигрыш и не создаёт лишний шум.</p></div>
+        <div class="panel card reveal-scale delay-3"><h3>Внедрение и обкатка</h3><p>Запуск AI-агентов в реальные процессы, сбор практики, корректировка и усиление модели.</p></div>
       </div>
     </div>
   </section>
 
   <section class="slide">
     <div class="wrap two-col">
-      <div class="reveal">
+      <div class="stack reveal-left">
         <div class="eyebrow">6. Текущий статус</div>
         <h2>Где AI First сейчас</h2>
         <p class="lead">Проект находится в фазе активной обкатки модели на реальных бизнесах и сборки более устойчивого продукта.</p>
       </div>
       <div class="metrics">
-        <div class="metric reveal delay-1"><div class="metric-number">3</div><div class="metric-label">человека в ядре команды: Алексей и 2 разработчика</div></div>
-        <div class="metric reveal delay-1"><div class="metric-number">2</div><div class="metric-label">клиента / проекта в месяц как текущий рабочий объём</div></div>
-        <div class="metric reveal delay-2"><div class="metric-number">500k</div><div class="metric-label">руб. прибыли в месяц от направления разработки</div></div>
-        <div class="metric reveal delay-2"><div class="metric-number">100k</div><div class="metric-label">первые деньги от внедрения агентского направления</div></div>
+        <div class="metric reveal-scale delay-1"><div class="metric-number">3</div><div class="metric-label">человека в ядре команды: Алексей и 2 разработчика</div></div>
+        <div class="metric reveal-scale delay-1"><div class="metric-number">2</div><div class="metric-label">клиента / проекта в месяц как текущий рабочий объём</div></div>
+        <div class="metric reveal-scale delay-2"><div class="metric-number">500k</div><div class="metric-label">руб. прибыли в месяц от направления разработки</div></div>
+        <div class="metric reveal-scale delay-2"><div class="metric-number">100k</div><div class="metric-label">первые деньги от внедрения агентского направления</div></div>
       </div>
     </div>
   </section>
 
   <section class="slide">
     <div class="wrap two-col">
-      <div class="panel card reveal">
+      <div class="panel card reveal-left">
         <div class="eyebrow">7. Основные вызовы</div>
         <h2>Что сейчас тормозит рост</h2>
         <p>Главный тормоз — попытка двигаться сразу в нескольких направлениях и нехватка сильной компактной команды, которая хорошо понимает AI и умеет быстро превращать гипотезы в рабочие внедрения.</p>
       </div>
-      <div class="panel card reveal delay-1">
-        <ul class="list">
+      <div class="panel card reveal-right delay-1">
+        <ul class="list tight">
           <li>нужно собрать 2–3 сильных человека в AI-контур</li>
           <li>нужно сузить и добить наиболее устойчивую модель внедрения</li>
           <li>нужно превратить отдельные кейсы в повторяемый продукт</li>
@@ -258,30 +315,29 @@
 
   <section class="slide">
     <div class="wrap two-col">
-      <div class="reveal">
+      <div class="stack reveal-left">
         <div class="eyebrow">8. Ближайшие задачи</div>
         <h2>Фокус на ближайшие 2 месяца</h2>
       </div>
-      <div class="panel card reveal delay-1">
-        <ul class="list">
-          <li>внедрить и обкатать AI First на 2–3 бизнесах</li>
-          <li>собрать практику и подтвердить рабочую модель</li>
-          <li>усилить предложение и упаковку</li>
-          <li>сформировать сильную рабочую команду</li>
-          <li>донастроить бизнес-модель и контур исполнения</li>
-        </ul>
+      <div class="panel card reveal-right delay-1">
+        <div class="mini-grid">
+          <div class="mini-box"><b>Тестирование</b><span class="small">обкатать AI First на 2–3 бизнесах</span></div>
+          <div class="mini-box"><b>Подтверждение модели</b><span class="small">собрать практику и доказать рабочий сценарий</span></div>
+          <div class="mini-box"><b>Усиление предложения</b><span class="small">доработать упаковку и ценность</span></div>
+          <div class="mini-box"><b>Команда</b><span class="small">сформировать сильное рабочее ядро</span></div>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="slide">
     <div class="wrap two-col">
-      <div class="panel card reveal">
+      <div class="panel card reveal-left">
         <div class="eyebrow">9. Горизонт года</div>
         <h2>Куда идёт проект</h2>
         <p>В горизонте года задача — собрать 2–3 устойчивых и прибыльных проекта в контуре разработки и AI-внедрения, усилить продуктовую модель и закрепить AI First как понятного партнёра по внедрению AI в бизнес.</p>
       </div>
-      <div class="panel card reveal delay-1">
+      <div class="panel card reveal-right delay-1">
         <table class="table">
           <thead>
             <tr><th>Направление</th><th>Цель</th></tr>
@@ -290,7 +346,7 @@
             <tr><td>Продукт</td><td>перевести внедрения в повторяемую систему</td></tr>
             <tr><td>Команда</td><td>усилить ядро и делегирование</td></tr>
             <tr><td>Продажи</td><td>стабилизировать понятный поток клиентов</td></tr>
-            <tr><td>Позиция</td><td>закрепить AI First как рабочий управленческий контур для бизнеса</td></tr>
+            <tr><td>Позиция</td><td>закрепить AI First как рабочий управленческий контур</td></tr>
           </tbody>
         </table>
       </div>
@@ -299,18 +355,18 @@
 
   <section class="slide">
     <div class="wrap two-col">
-      <div class="reveal">
+      <div class="stack reveal-left">
         <div class="eyebrow">10. Резюме</div>
         <h2>Что такое AI First в одном слайде</h2>
         <p class="quote">AI First помогает собственнику видеть, что реально происходит в бизнесе, и быстрее доводить решения до результата.</p>
       </div>
-      <div class="panel card reveal delay-1">
-        <ul class="list">
-          <li>фокус на управленческий контур, команду и исполнение</li>
-          <li>внедрение AI-агентов в реальные процессы бизнеса</li>
-          <li>текущая стадия — обкатка модели и сбор устойчивого продукта</li>
-          <li>цель — перейти от отдельных внедрений к масштабируемой системе</li>
-        </ul>
+      <div class="panel card reveal-right delay-1">
+        <div class="mini-grid">
+          <div class="mini-box"><b>Фокус</b><span class="small">управленческий контур, команда и исполнение</span></div>
+          <div class="mini-box"><b>Инструмент</b><span class="small">AI-агенты в реальные процессы бизнеса</span></div>
+          <div class="mini-box"><b>Стадия</b><span class="small">обкатка модели и сбор устойчивого продукта</span></div>
+          <div class="mini-box"><b>Цель</b><span class="small">масштабируемая система вместо отдельных внедрений</span></div>
+        </div>
         <p class="small">Контакт для продолжения: Алексей Южанинов · AI First</p>
       </div>
     </div>
@@ -334,6 +390,20 @@
     };
     updateProgress();
     window.addEventListener('scroll', updateProgress, { passive: true });
+
+    const tiltCards = [...document.querySelectorAll('.card')];
+    tiltCards.forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = `translateY(-4px) rotateY(${x * 5}deg) rotateX(${y * -5}deg)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
 
     window.addEventListener('keydown', (e) => {
       const index = slides.findIndex(slide => {
