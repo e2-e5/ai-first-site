@@ -134,6 +134,7 @@
     .list li::marker { color: var(--accent); }
     .quote { font-family: Manrope, Inter, sans-serif; font-size: clamp(28px, 4vw, 58px); line-height: 1.02; max-width: 13ch; }
     .small { font-size: var(--small); color: var(--muted); line-height: 1.45; }
+    .hero-quote { font-family: Manrope, Inter, sans-serif; font-size: clamp(22px, 2.6vw, 36px); line-height: 1.12; color: var(--text); max-width: 15ch; }
     .mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
     .mini-box {
       padding: 18px;
@@ -332,23 +333,18 @@
 
   <section class="slide">
     <div class="wrap two-col">
-      <div class="panel card reveal-left">
+      <div class="stack reveal-left">
         <div class="eyebrow">9. Горизонт года</div>
         <h2>Куда идёт проект</h2>
-        <p>В горизонте года задача — собрать 2–3 устойчивых и прибыльных проекта в контуре разработки и AI-внедрения, усилить продуктовую модель и закрепить AI First как понятного партнёра по внедрению AI в бизнес.</p>
+        <p class="lead">На горизонте года задача простая: собрать 2–3 устойчивых и прибыльных проекта, усилить продуктовую модель и закрепить AI First как рабочий управленческий контур для бизнеса.</p>
       </div>
       <div class="panel card reveal-right delay-1">
-        <table class="table">
-          <thead>
-            <tr><th>Направление</th><th>Цель</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Продукт</td><td>перевести внедрения в повторяемую систему</td></tr>
-            <tr><td>Команда</td><td>усилить ядро и делегирование</td></tr>
-            <tr><td>Продажи</td><td>стабилизировать понятный поток клиентов</td></tr>
-            <tr><td>Позиция</td><td>закрепить AI First как рабочий управленческий контур</td></tr>
-          </tbody>
-        </table>
+        <div class="mini-grid">
+          <div class="mini-box"><b>Продукт</b><span class="small">перевести внедрения в повторяемую систему</span></div>
+          <div class="mini-box"><b>Команда</b><span class="small">усилить ядро и делегирование</span></div>
+          <div class="mini-box"><b>Продажи</b><span class="small">стабилизировать понятный поток клиентов</span></div>
+          <div class="mini-box"><b>Позиция</b><span class="small">закрепить AI First как понятный управленческий контур</span></div>
+        </div>
       </div>
     </div>
   </section>
@@ -357,17 +353,17 @@
     <div class="wrap two-col">
       <div class="stack reveal-left">
         <div class="eyebrow">10. Резюме</div>
-        <h2>Что такое AI First в одном слайде</h2>
-        <p class="quote">AI First помогает собственнику видеть, что реально происходит в бизнесе, и быстрее доводить решения до результата.</p>
+        <h2>Что такое AI First</h2>
+        <p class="hero-quote">AI First даёт собственнику ясную картину бизнеса и помогает быстрее доводить решения до результата.</p>
       </div>
       <div class="panel card reveal-right delay-1">
         <div class="mini-grid">
-          <div class="mini-box"><b>Фокус</b><span class="small">управленческий контур, команда и исполнение</span></div>
-          <div class="mini-box"><b>Инструмент</b><span class="small">AI-агенты в реальные процессы бизнеса</span></div>
-          <div class="mini-box"><b>Стадия</b><span class="small">обкатка модели и сбор устойчивого продукта</span></div>
-          <div class="mini-box"><b>Цель</b><span class="small">масштабируемая система вместо отдельных внедрений</span></div>
+          <div class="mini-box"><b>Управленческий контур</b><span class="small">видно, что реально происходит в команде и задачах</span></div>
+          <div class="mini-box"><b>Контроль исполнения</b><span class="small">решения доходят до действия, а не теряются по дороге</span></div>
+          <div class="mini-box"><b>AI-агенты в процессах</b><span class="small">инструмент встроен в реальную операционку</span></div>
+          <div class="mini-box"><b>Масштабируемая модель</b><span class="small">цель — система, а не набор разовых внедрений</span></div>
         </div>
-        <p class="small">Контакт для продолжения: Алексей Южанинов · AI First</p>
+        <p class="small">Алексей Южанинов · AI First</p>
       </div>
     </div>
   </section>
