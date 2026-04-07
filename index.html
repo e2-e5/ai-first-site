@@ -1,392 +1,354 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI First — AI-система управления для собственника бизнеса</title>
-<meta name="description" content="Ставите управляющему — отчёт получаете сами. AI мониторинг команды, исполнения решений и отдела продаж. Бесплатный аудит за 3 дня.">
-<meta property="og:title" content="AI First — AI-система управления для собственника бизнеса">
-<meta property="og:description" content="Ставите управляющему — отчёт получаете сами. AI мониторинг команды, исполнения решений и отдела продаж.">
-<meta property="og:type" content="website">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#0a0a0f;
-  --bg-card:#12121a;
-  --accent:#00d4ff;
-  --accent-dim:rgba(0,212,255,.12);
-  --accent-glow:rgba(0,212,255,.25);
-  --text:#e4e4ed;
-  --text-dim:#8a8a9a;
-  --text-heading:#f0f0f8;
-  --border:#1e1e2e;
-  --radius:12px;
-}
-html{scroll-behavior:smooth;font-size:16px}
-body{
-  font-family:'Space Grotesk',system-ui,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  line-height:1.65;
-  -webkit-font-smoothing:antialiased;
-}
-a{color:var(--accent);text-decoration:none}
-.container{max-width:1120px;margin:0 auto;padding:0 24px}
-section{padding:100px 0}
-@media(max-width:768px){section{padding:64px 0}}
-h1,h2,h3,h4{color:var(--text-heading);font-weight:700;line-height:1.2}
-h1{font-size:clamp(2rem,5vw,3.25rem);letter-spacing:-.02em}
-h2{font-size:clamp(1.6rem,3.5vw,2.4rem);letter-spacing:-.015em;margin-bottom:48px}
-h3{font-size:1.2rem;margin-bottom:12px}
-.section-label{
-  display:inline-block;font-size:.75rem;font-weight:600;
-  letter-spacing:.12em;text-transform:uppercase;
-  color:var(--accent);margin-bottom:16px;
-}
-.subtitle{font-size:clamp(1.05rem,2vw,1.25rem);color:var(--text-dim);max-width:640px;line-height:1.6}
-.btn{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:16px 36px;font-family:inherit;font-size:1.05rem;font-weight:600;
-  color:#000;background:var(--accent);border:none;border-radius:var(--radius);
-  cursor:pointer;transition:transform .2s,box-shadow .2s;
-  box-shadow:0 0 24px var(--accent-glow);
-}
-.btn:hover{transform:translateY(-2px);box-shadow:0 4px 32px var(--accent-glow)}
-.btn-micro{display:block;margin-top:12px;font-size:.85rem;color:var(--text-dim)}
-.hero{
-  min-height:100vh;display:flex;align-items:center;
-  position:relative;overflow:hidden;padding-top:60px;
-}
-.hero::before{
-  content:'';position:absolute;width:600px;height:600px;
-  top:-200px;right:-100px;
-  background:radial-gradient(circle,var(--accent-glow) 0%,transparent 70%);
-  pointer-events:none;
-}
-.hero-content{position:relative;z-index:1;max-width:720px}
-.hero h1{margin-bottom:24px}
-.hero .subtitle{margin-bottom:40px}
-.logo{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  padding:20px 24px;
-  background:rgba(10,10,15,.8);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--border);
-}
-.logo span{font-size:1.15rem;font-weight:700;color:var(--text-heading);letter-spacing:.04em}
-.logo .dot{color:var(--accent)}
-.cards{display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
-.card{
-  background:var(--bg-card);border:1px solid var(--border);
-  border-radius:var(--radius);padding:32px;
-  transition:border-color .3s,transform .3s;
-}
-.card:hover{border-color:var(--accent);transform:translateY(-4px)}
-.card-icon{
-  width:48px;height:48px;display:flex;align-items:center;justify-content:center;
-  background:var(--accent-dim);border-radius:10px;margin-bottom:20px;font-size:1.4rem;
-}
-.card p{color:var(--text-dim);font-size:.95rem}
-.anchor-stat{
-  margin-top:56px;padding:32px;background:var(--bg-card);
-  border-left:3px solid var(--accent);
-  border-radius:0 var(--radius) var(--radius) 0;
-  font-size:1.05rem;color:var(--text-dim);
-}
-.anchor-stat strong{color:var(--accent);font-size:1.5rem;display:block;margin-bottom:8px}
-.insight-block{max-width:700px;font-size:1.1rem;line-height:1.75;color:var(--text-dim)}
-.insight-block p+p{margin-top:20px}
-.insight-block strong{color:var(--text-heading)}
-.steps{display:grid;gap:32px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));counter-reset:step}
-.step{
-  position:relative;padding:32px;padding-top:60px;
-  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
-}
-.step::before{
-  counter-increment:step;content:counter(step);
-  position:absolute;top:24px;left:32px;
-  font-size:1.6rem;font-weight:700;color:var(--accent);opacity:.6;
-}
-.step h3{margin-bottom:10px}
-.step p{color:var(--text-dim);font-size:.95rem}
-.compare-table{width:100%;border-collapse:collapse;font-size:.95rem}
-.compare-table th,.compare-table td{padding:16px 20px;text-align:left;border-bottom:1px solid var(--border)}
-.compare-table th{color:var(--accent);font-weight:600;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
-.compare-table td:first-child{color:var(--text-dim);font-weight:500}
-.compare-table tr:last-child td{border-bottom:none}
-.table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow-x:auto}
-.use-cases{display:grid;gap:32px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
-.use-case{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:36px}
-.use-case h3{color:var(--accent);font-size:1.1rem;margin-bottom:20px}
-.use-case ul{list-style:none;margin-bottom:20px}
-.use-case li{position:relative;padding-left:20px;margin-bottom:10px;color:var(--text-dim);font-size:.95rem}
-.use-case li::before{content:'\2192';position:absolute;left:0;color:var(--accent)}
-.use-case .result{padding-top:16px;border-top:1px solid var(--border);font-weight:600;color:var(--text-heading);font-size:.95rem}
-.faq-list{max-width:760px}
-.faq-item{border-bottom:1px solid var(--border);padding:24px 0}
-.faq-q{
-  font-weight:600;font-size:1.05rem;color:var(--text-heading);
-  cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;
-}
-.faq-q::after{content:'+';font-size:1.4rem;color:var(--accent);transition:transform .3s;flex-shrink:0}
-.faq-item.open .faq-q::after{transform:rotate(45deg)}
-.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;color:var(--text-dim);font-size:.95rem;line-height:1.7}
-.faq-item.open .faq-a{max-height:200px;padding-top:14px}
-.pricing-grid{display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
-.price-card{
-  background:var(--bg-card);border:1px solid var(--border);
-  border-radius:var(--radius);padding:36px;display:flex;flex-direction:column;
-}
-.price-card.featured{border-color:var(--accent)}
-.price-card h3{font-size:1.15rem;margin-bottom:8px}
-.price-card .price{font-size:2rem;font-weight:700;color:var(--accent);margin:16px 0 8px}
-.price-card .price-period{font-size:.85rem;color:var(--text-dim)}
-.price-card .price-note{font-size:.85rem;color:var(--text-dim);margin-bottom:20px}
-.price-card ul{list-style:none;flex:1}
-.price-card li{padding:8px 0 8px 22px;position:relative;color:var(--text-dim);font-size:.93rem}
-.price-card li::before{content:'\2713';position:absolute;left:0;color:var(--accent);font-weight:700}
-.price-card .target{margin-top:20px;padding-top:16px;border-top:1px solid var(--border);font-size:.85rem;color:var(--text-dim)}
-.cta-final{text-align:center}
-.cta-final h2{margin-bottom:20px}
-.cta-final .subtitle{margin:0 auto 40px;text-align:center}
-footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;font-size:.85rem;color:var(--text-dim)}
-.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
-.reveal.visible{opacity:1;transform:translateY(0)}
-@media(max-width:640px){
-  .cards,.steps,.pricing-grid,.use-cases{grid-template-columns:1fr}
-  .hero{min-height:auto;padding-top:100px;padding-bottom:60px}
-  .compare-table th,.compare-table td{padding:12px 14px;font-size:.85rem}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI First — отчётная презентация</title>
+  <meta name="description" content="AI First — отчётная презентация о продукте, модели работы, текущем фокусе и статусе развития." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-2: #0d1b2f;
+      --panel: rgba(13, 27, 47, 0.78);
+      --panel-2: rgba(9, 18, 32, 0.88);
+      --text: #f3f7fb;
+      --muted: #9cb0c8;
+      --line: rgba(255,255,255,0.12);
+      --accent: #62e6ff;
+      --accent-2: #8a7dff;
+      --success: #7df0b8;
+      --shadow: 0 24px 80px rgba(0,0,0,0.32);
+      --radius: 24px;
+      --maxw: 1240px;
+      --h1: clamp(40px, 7vw, 84px);
+      --h2: clamp(30px, 4vw, 54px);
+      --h3: clamp(18px, 2vw, 28px);
+      --body: clamp(16px, 1.35vw, 22px);
+      --small: clamp(13px, 1vw, 16px);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; min-height: 100%; }
+    html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, #11294a 0%, var(--bg) 45%, #040914 100%);
+      overflow-y: auto;
+    }
+    .slide {
+      min-height: 100vh;
+      min-height: 100dvh;
+      scroll-snap-align: start;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(98,230,255,0.14), transparent 30%),
+        radial-gradient(circle at 85% 18%, rgba(138,125,255,0.18), transparent 25%),
+        radial-gradient(circle at 50% 100%, rgba(255,255,255,0.05), transparent 28%);
+      z-index: -1;
+    }
+    .wrap { width: min(100%, var(--maxw)); display: grid; gap: 24px; }
+    .hero { grid-template-columns: 1.15fr 0.85fr; align-items: end; }
+    .two-col { grid-template-columns: 1fr 1fr; align-items: start; }
+    .three-col { grid-template-columns: repeat(3, 1fr); }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .eyebrow {
+      display: inline-flex;
+      padding: 10px 14px;
+      border: 1px solid rgba(98,230,255,0.28);
+      border-radius: 999px;
+      color: var(--accent);
+      background: rgba(98,230,255,0.08);
+      font-size: var(--small);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+    h1,h2,h3,p{margin:0}
+    h1 { font-family: Manrope, Inter, sans-serif; font-size: var(--h1); line-height: 0.94; letter-spacing: -0.05em; max-width: 10ch; }
+    h2 { font-family: Manrope, Inter, sans-serif; font-size: var(--h2); line-height: 0.98; letter-spacing: -0.04em; max-width: 13ch; }
+    h3 { font-size: var(--h3); line-height: 1.1; }
+    .lead { color: var(--muted); font-size: clamp(18px, 1.5vw, 24px); line-height: 1.5; max-width: 38ch; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .card { padding: 24px; display: grid; gap: 14px; }
+    .panel p, .list li, .metric-label { color: var(--muted); font-size: var(--body); line-height: 1.45; }
+    .metrics, .cards, .steps, .summary { display: grid; gap: 16px; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .metric { padding: 22px; border-radius: 20px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
+    .metric-number { font-size: clamp(34px, 4vw, 52px); line-height: 1; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+    .list { margin: 0; padding-left: 20px; display: grid; gap: 12px; }
+    .list li::marker { color: var(--accent); }
+    .quote { font-family: Manrope, Inter, sans-serif; font-size: clamp(28px, 4vw, 58px); line-height: 1.02; max-width: 14ch; }
+    .small { font-size: var(--small); color: var(--muted); line-height: 1.45; }
+    .table {
+      width: 100%; border-collapse: collapse; font-size: 15px; overflow: hidden; border-radius: 18px;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    }
+    .table th, .table td { padding: 16px 18px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .table th { color: var(--accent); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+    .table td { color: var(--muted); }
+    .table tr:last-child td { border-bottom: none; }
+    .footer-note { position: absolute; left: 28px; bottom: 16px; color: rgba(255,255,255,.45); font-size: 12px; }
+    .progress { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.06); z-index: 20; }
+    .progress span { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s ease, transform .7s ease; }
+    .visible .reveal { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 120ms; }
+    .delay-2 { transition-delay: 240ms; }
+    .delay-3 { transition-delay: 360ms; }
+    @media (max-width: 980px) {
+      .hero, .two-col, .three-col, .grid-2, .metrics { grid-template-columns: 1fr; }
+      .slide { padding: 20px; }
+      h1 { max-width: 12ch; }
+    }
+  </style>
 </head>
 <body>
+  <div class="progress"><span id="progressBar"></span></div>
 
-<nav class="logo">
-  <div class="container">
-    <span>AI<span class="dot">.</span>FIRST</span>
-  </div>
-</nav>
-
-<section class="hero">
-  <div class="container">
-    <div class="hero-content reveal">
-      <h1>Вы управляете компанией.<br>А кто управляет информацией?</h1>
-      <p class="subtitle">AI First — система, которую вы ставите управляющему, а&nbsp;отчёт получаете сами. Каждое утро. Без&nbsp;вопросов.</p>
-      <a href="https://t.me/Urlexx" class="btn">Бесплатный аудит за 3 дня &#8594;</a>
-      <span class="btn-micro">Подключим 2 рабочих чата &#8594; покажем, что вы не видите</span>
-    </div>
-  </div>
-</section>
-
-<section id="problem">
-  <div class="container">
-    <div class="reveal">
-      <span class="section-label">Проблема</span>
-      <h2>Вы принимаете решения — но не знаете, дошли&nbsp;ли они до исполнения</h2>
-    </div>
-    <div class="cards">
-      <div class="card reveal">
-        <div class="card-icon">&#128168;</div>
-        <h3>Решения испаряются</h3>
-        <p>Обсудили на планёрке, зафиксировали, ушли. Через неделю — ничего не сделано. И&nbsp;никто не скажет вам об этом сам.</p>
+  <section class="slide visible">
+    <div class="wrap hero">
+      <div class="reveal">
+        <div class="eyebrow">AI First · отчётная презентация</div>
+        <h1>AI First</h1>
+        <p class="lead">AI-система управления для собственника бизнеса. Основной фокус — контроль исполнения, прозрачность команды, управленческий контур и внедрение AI-агентов в реальные процессы компании.</p>
       </div>
-      <div class="card reveal">
-        <div class="card-icon">&#129695;</div>
-        <h3>Информация искажена</h3>
-        <p>Управляющий докладывает &laquo;всё по плану&raquo;. Но в чатах команда буксует, задачи переносят, клиенты ждут ответа третий день.</p>
-      </div>
-      <div class="card reveal">
-        <div class="card-icon">&#8987;</div>
-        <h3>Нет времени копать</h3>
-        <p>Вы не полезете читать 47 чатов. А именно там — реальная картина вашего бизнеса.</p>
+      <div class="panel card reveal delay-1">
+        <h3>Коротко</h3>
+        <p>AI First ставится в управленческий контур бизнеса. Собственник получает более точную картину происходящего, быстрее видит сбои и принимает решения не по ощущениям, а по фактическому состоянию команды, задач и клиентского потока.</p>
       </div>
     </div>
-    <div class="anchor-stat reveal">
-      <strong>50% решений с планёрки не доходят до исполнения в срок.</strong>
-      Вы об этом узнаёте в лучшем случае на следующей планёрке. В худшем — от клиента.
-    </div>
-  </div>
-</section>
+    <div class="footer-note">AI First report deck · v1</div>
+  </section>
 
-<section id="insight">
-  <div class="container">
-    <div class="reveal">
-      <span class="section-label">Инсайт</span>
-      <h2>Честно: вы не хотите это делать сами. И правильно.</h2>
-    </div>
-    <div class="insight-block reveal">
-      <p>Мы провели десятки встреч с собственниками. Каждый говорит: <strong>&laquo;Классная система — поставьте моему управляющему&raquo;</strong>.</p>
-      <p>И они правы. Собственник не должен лезть в операционку. Он должен <strong>видеть результат</strong>.</p>
-      <p>Поэтому AI First работает так: система стоит у вашего COO/управляющего. Он работает с ней. А вы — просто читаете отчёт.</p>
-    </div>
-  </div>
-</section>
-
-<section id="how">
-  <div class="container">
-    <div class="reveal">
-      <span class="section-label">Как это работает</span>
-      <h2>Вам ничего не нужно делать. Буквально.</h2>
-    </div>
-    <div class="steps">
-      <div class="step reveal">
-        <h3>Подключаем</h3>
-        <p>Рабочие чаты, почту, CRM, задачники — всё, что есть. Без перестройки процессов.</p>
+  <section class="slide">
+    <div class="wrap two-col">
+      <div class="reveal">
+        <div class="eyebrow">1. Позиционирование</div>
+        <h2>Что такое AI First</h2>
+        <p class="lead">AI First — это не отдельный бот и не разовая автоматизация. Это слой управления, который помогает собственнику видеть реальное исполнение решений, состояние команды и узкие места в операционке.</p>
       </div>
-      <div class="step reveal">
-        <h3>Анализируем 24/7</h3>
-        <p>AI мониторит коммуникации: кто что обсуждает, что обещано, что сделано, где молчат, где буксуют.</p>
-      </div>
-      <div class="step reveal">
-        <h3>Вы получаете</h3>
-        <p>Каждое утро — 5-минутный брифинг в личку. Ваш управляющий — рабочую панель с сигналами и рекомендациями.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="users">
-  <div class="container">
-    <div class="reveal">
-      <span class="section-label">Два пользователя</span>
-      <h2>Собственник видит картину. Управляющий получает инструмент.</h2>
-    </div>
-    <div class="table-wrap reveal">
-      <table class="compare-table">
-        <thead>
-          <tr><th></th><th>Собственник</th><th>COO / Управляющий</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Что получает</td><td>Утренний брифинг в мессенджер</td><td>Рабочая панель с сигналами</td></tr>
-          <tr><td>Формат</td><td>5 минут чтения</td><td>Ежедневная работа</td></tr>
-          <tr><td>Ценность</td><td>Контроль без микроменеджмента</td><td>Видимость по команде + рекомендации</td></tr>
-          <tr><td>Усилие</td><td>Ноль. Открыл — прочитал</td><td>Интегрирован в работу</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<section id="cases">
-  <div class="container">
-    <div class="reveal">
-      <span class="section-label">Сценарии</span>
-      <h2>Два сценария, которые уже работают</h2>
-    </div>
-    <div class="use-cases">
-      <div class="use-case reveal">
-        <h3>Мониторинг исполнения</h3>
-        <ul>
-          <li>Подключаем рабочие чаты команды</li>
-          <li>Отслеживаем: решение принято &#8594; выполнено или забыто</li>
-          <li>Сигналы: просрочки, молчуны, повторяющиеся сбои</li>
+      <div class="panel card reveal delay-1">
+        <ul class="list">
+          <li>мониторинг исполнения решений</li>
+          <li>контроль задач и управленческого контура</li>
+          <li>усиление собственника и руководителя</li>
+          <li>внедрение AI-агентов в процессы компании</li>
         </ul>
-        <div class="result">Результат: вы видите, что 40% задач спринта буксуют — до того, как сорвётся дедлайн</div>
       </div>
-      <div class="use-case reveal">
-        <h3>Мониторинг отдела продаж</h3>
-        <ul>
-          <li>Анализ переписок с клиентами + CRM + звонки</li>
-          <li>Сигналы: потерянные лиды, долгие ответы, слабые менеджеры</li>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="wrap two-col">
+      <div class="panel card reveal">
+        <div class="eyebrow">2. Проблема рынка</div>
+        <h2>Почему это нужно</h2>
+        <p>Собственник принимает решения, но часто не видит, как они доходят до исполнения. Управляющий приносит верхнеуровневую картину, а реальное состояние бизнеса живёт в задачах, чатах, просрочках и разрывах между отделами.</p>
+      </div>
+      <div class="cards three-col">
+        <div class="panel card reveal delay-1"><h3>Решения теряются</h3><p>Обсудили, зафиксировали, пошли дальше. Через неделю часть задач уже выпала из контура.</p></div>
+        <div class="panel card reveal delay-2"><h3>Информация искажается</h3><p>На уровне отчёта всё спокойно. На уровне команды уже копится задержка и шум.</p></div>
+        <div class="panel card reveal delay-3"><h3>Нет времени копать</h3><p>Собственник не читает десятки чатов и не собирает картину вручную.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="wrap two-col">
+      <div class="reveal">
+        <div class="eyebrow">3. Что делает продукт</div>
+        <h2>Основные направления AI First</h2>
+      </div>
+      <div class="cards grid-2">
+        <div class="panel card reveal delay-1"><h3>Мониторинг команды</h3><p>Выявление задержек, зависаний, провалов в исполнении и слабых мест в ежедневной работе.</p></div>
+        <div class="panel card reveal delay-1"><h3>Контроль исполнения решений</h3><p>Понимание, какие решения реально доходят до выполнения, а какие зависают по дороге.</p></div>
+        <div class="panel card reveal delay-2"><h3>Контур продаж</h3><p>Мониторинг клиентского потока, коммуникаций, узких мест в обработке лидов и клиентском сервисе.</p></div>
+        <div class="panel card reveal delay-2"><h3>AI-агенты под процессы</h3><p>Разработка и внедрение AI-агентов / AI-copilot под конкретные задачи бизнеса и руководителя.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="wrap two-col">
+      <div class="panel card reveal">
+        <div class="eyebrow">4. Для кого</div>
+        <h2>Целевая аудитория</h2>
+        <p>Клиенты AI First — собственники бизнеса и топ-руководители компаний, которым нужен более прозрачный и управляемый контур принятия решений.</p>
+      </div>
+      <div class="panel card reveal delay-1">
+        <ul class="list">
+          <li>собственники, у которых рост упирается в управляемость</li>
+          <li>руководители, которым нужен контроль исполнения без ручного микроменеджмента</li>
+          <li>компании, где ключевая проблема — не идея, а дисциплина исполнения</li>
+          <li>бизнесы, которым нужен AI в операционке, а не витринный пилот</li>
         </ul>
-        <div class="result">Результат: через неделю вы знаете, кто из менеджеров теряет клиентов и почему</div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="faq">
-  <div class="container">
-    <div class="reveal">
-      <span class="section-label">FAQ</span>
-      <h2>Вопросы, которые нам задают</h2>
-    </div>
-    <div class="faq-list">
-      <div class="faq-item reveal">
-        <div class="faq-q">&laquo;А что с безопасностью данных?&raquo;</div>
-        <div class="faq-a">Данные обрабатываются на выделенном сервере. Мы не храним переписки — только аналитические сигналы. NDA подписываем до начала.</div>
+  <section class="slide">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="eyebrow">5. Формат работы</div>
+        <h2>Как работает внедрение</h2>
       </div>
-      <div class="faq-item reveal">
-        <div class="faq-q">&laquo;Мне не нужна ещё одна система&raquo;</div>
-        <div class="faq-a">Вам — не нужна. Вы получаете сообщение в Telegram. Система нужна вашему управляющему — и она упрощает его работу, а не усложняет.</div>
-      </div>
-      <div class="faq-item reveal">
-        <div class="faq-q">&laquo;У нас уже есть CRM / задачник / планёрки&raquo;</div>
-        <div class="faq-a">Отлично. Мы подключаемся поверх. Не заменяем, а видим то, чего CRM не видит — реальное поведение команды.</div>
-      </div>
-      <div class="faq-item reveal">
-        <div class="faq-q">&laquo;Сколько времени на внедрение?&raquo;</div>
-        <div class="faq-a">Подключение — 1 день. Первый отчёт — через 3 дня. Полная настройка — 2 недели.</div>
+      <div class="cards three-col">
+        <div class="panel card reveal delay-1"><h3>Диагностика</h3><p>Разбор текущей операционки, точек потери контроля, контуров задач, чатов и решений.</p></div>
+        <div class="panel card reveal delay-2"><h3>Проектирование</h3><p>Выбор сценариев, где AI даёт реальный выигрыш, а не красивую демонстрацию.</p></div>
+        <div class="panel card reveal delay-3"><h3>Внедрение и обкатка</h3><p>Запуск AI-агентов в реальные процессы, сбор практики, корректировка и усиление модели.</p></div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="pricing">
-  <div class="container">
-    <div class="reveal">
-      <span class="section-label">Тарифы</span>
-      <h2>Стоимость</h2>
+  <section class="slide">
+    <div class="wrap two-col">
+      <div class="reveal">
+        <div class="eyebrow">6. Текущий статус</div>
+        <h2>Где AI First сейчас</h2>
+        <p class="lead">Проект находится в фазе активной обкатки модели на реальных бизнесах и сборки более устойчивого продукта.</p>
+      </div>
+      <div class="metrics">
+        <div class="metric reveal delay-1"><div class="metric-number">3</div><div class="metric-label">человека в ядре команды: Алексей и 2 разработчика</div></div>
+        <div class="metric reveal delay-1"><div class="metric-number">2</div><div class="metric-label">клиента / проекта в месяц как текущий рабочий объём</div></div>
+        <div class="metric reveal delay-2"><div class="metric-number">500k</div><div class="metric-label">руб. прибыли в месяц от направления разработки</div></div>
+        <div class="metric reveal delay-2"><div class="metric-number">100k</div><div class="metric-label">первые деньги от внедрения агентского направления</div></div>
+      </div>
     </div>
-    <div class="pricing-grid">
-      <div class="price-card reveal">
-        <h3>Видимость</h3>
-        <div class="price">60 000 &#8381;<span class="price-period"> / мес</span></div>
-        <div class="price-note">Интеграция: от 100 000 &#8381;</div>
-        <ul>
-          <li>Утренний брифинг собственнику</li>
-          <li>Сигналы по исполнению решений</li>
-          <li>Мониторинг рабочих чатов</li>
+  </section>
+
+  <section class="slide">
+    <div class="wrap two-col">
+      <div class="panel card reveal">
+        <div class="eyebrow">7. Основные вызовы</div>
+        <h2>Что сейчас тормозит рост</h2>
+        <p>Главный тормоз — попытка двигаться сразу в нескольких направлениях и нехватка сильной компактной команды, которая хорошо понимает AI и умеет быстро превращать гипотезы в рабочие внедрения.</p>
+      </div>
+      <div class="panel card reveal delay-1">
+        <ul class="list">
+          <li>нужно собрать 2–3 сильных человека в AI-контур</li>
+          <li>нужно сузить и добить наиболее устойчивую модель внедрения</li>
+          <li>нужно превратить отдельные кейсы в повторяемый продукт</li>
+          <li>нужно усилить управляемость и предсказуемость результата</li>
         </ul>
-        <div class="target">Для собственника, который хочет видеть</div>
-      </div>
-      <div class="price-card featured reveal">
-        <h3>Видимость + Действие</h3>
-        <div class="price">120 000 &#8381;<span class="price-period"> / мес</span></div>
-        <div class="price-note">Интеграция включена</div>
-        <ul>
-          <li>Всё из тарифа &laquo;Видимость&raquo;</li>
-          <li>Рекомендации и черновики действий</li>
-          <li>Настройка триггеров и алертов</li>
-          <li>Рабочая панель для управляющего</li>
-        </ul>
-        <div class="target">Собственник + управляющий работают с системой</div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="cta" class="cta-final">
-  <div class="container reveal">
-    <span class="section-label">Начать</span>
-    <h2>Бесплатный аудит за 3 дня</h2>
-    <p class="subtitle">Подключим 2 рабочих чата вашей команды. Через 3 дня покажем, что вы не видели — и сколько это вам стоит. Без обязательств. Без внедрения. Просто результат.</p>
-    <a href="https://t.me/Urlexx" class="btn">Начать бесплатный аудит &#8594;</a>
-    <span class="btn-micro">Обычно записываемся на 3–5 дней вперёд</span>
-  </div>
-</section>
+  <section class="slide">
+    <div class="wrap two-col">
+      <div class="reveal">
+        <div class="eyebrow">8. Ближайшие задачи</div>
+        <h2>Фокус на ближайшие 2 месяца</h2>
+      </div>
+      <div class="panel card reveal delay-1">
+        <ul class="list">
+          <li>внедрить и обкатать AI First на 2–3 бизнесах</li>
+          <li>собрать практику и подтвердить рабочую модель</li>
+          <li>усилить предложение и упаковку</li>
+          <li>сформировать сильную рабочую команду</li>
+          <li>донастроить бизнес-модель и контур исполнения</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
-<footer>
-  <div class="container">
-    <p>&copy; 2026 AI First. Все права защищены.</p>
-  </div>
-</footer>
+  <section class="slide">
+    <div class="wrap two-col">
+      <div class="panel card reveal">
+        <div class="eyebrow">9. Горизонт года</div>
+        <h2>Куда идёт проект</h2>
+        <p>В горизонте года задача — собрать 2–3 устойчивых и прибыльных проекта в контуре разработки и AI-внедрения, усилить продуктовую модель и закрепить AI First как понятного партнёра по внедрению AI в бизнес.</p>
+      </div>
+      <div class="panel card reveal delay-1">
+        <table class="table">
+          <thead>
+            <tr><th>Направление</th><th>Цель</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Продукт</td><td>перевести внедрения в повторяемую систему</td></tr>
+            <tr><td>Команда</td><td>усилить ядро и делегирование</td></tr>
+            <tr><td>Продажи</td><td>стабилизировать понятный поток клиентов</td></tr>
+            <tr><td>Позиция</td><td>закрепить AI First как рабочий управленческий контур для бизнеса</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 
-<script>
-document.addEventListener('DOMContentLoaded',function(){
-  var obs=new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}
+  <section class="slide">
+    <div class="wrap two-col">
+      <div class="reveal">
+        <div class="eyebrow">10. Резюме</div>
+        <h2>Что такое AI First в одном слайде</h2>
+        <p class="quote">AI First помогает собственнику видеть, что реально происходит в бизнесе, и быстрее доводить решения до результата.</p>
+      </div>
+      <div class="panel card reveal delay-1">
+        <ul class="list">
+          <li>фокус на управленческий контур, команду и исполнение</li>
+          <li>внедрение AI-агентов в реальные процессы бизнеса</li>
+          <li>текущая стадия — обкатка модели и сбор устойчивого продукта</li>
+          <li>цель — перейти от отдельных внедрений к масштабируемой системе</li>
+        </ul>
+        <p class="small">Контакт для продолжения: Алексей Южанинов · AI First</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    const progressBar = document.getElementById('progressBar');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.35 });
+    slides.forEach(slide => observer.observe(slide));
+
+    const updateProgress = () => {
+      const scrollTop = window.scrollY;
+      const max = document.body.scrollHeight - window.innerHeight;
+      const progress = max > 0 ? (scrollTop / max) * 100 : 0;
+      progressBar.style.width = progress + '%';
+    };
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, { passive: true });
+
+    window.addEventListener('keydown', (e) => {
+      const index = slides.findIndex(slide => {
+        const r = slide.getBoundingClientRect();
+        return r.top >= -window.innerHeight * 0.3 && r.top < window.innerHeight * 0.3;
+      });
+      if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+        e.preventDefault();
+        (slides[Math.min(index + 1, slides.length - 1)] || slides[0]).scrollIntoView({ behavior: 'smooth' });
+      }
+      if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+        e.preventDefault();
+        (slides[Math.max(index - 1, 0)] || slides[0]).scrollIntoView({ behavior: 'smooth' });
+      }
     });
-  },{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
-  document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
-  document.querySelectorAll('.faq-q').forEach(function(q){
-    q.addEventListener('click',function(){q.closest('.faq-item').classList.toggle('open')});
-  });
-});
-</script>
+  </script>
 </body>
 </html>
